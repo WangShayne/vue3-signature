@@ -5,6 +5,10 @@
   "author": "Shayne Wang <1614565666@qq.com>",
   "private": false,
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WangShayne/vue3-signature"
+  },
   "files": ["dist"],
   "main": "./dist/vue3-signature.umd.js",
   "module": "./dist/vue3-signature.es.js",
