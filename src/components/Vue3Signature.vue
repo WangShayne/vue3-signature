@@ -113,7 +113,6 @@ const clear = () => {
   state.sig.clear();
 };
 const save = (format) => {
-  console.log(state.sig)
   return format ? state.sig.toDataURL(format) : state.sig.toDataURL();
   // signaturePad.toDataURL(); // save image as PNG
   // signaturePad.toDataURL("image/jpeg"); // save image as JPEG

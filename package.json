@@ -1,7 +1,7 @@
 {
   "name": "vue3-signature",
   "description": "Electronic signature for Vue3",
-  "version": "0.1.11",
+  "version": "0.1.13",
   "author": "Shayne Wang <1614565666@qq.com>",
   "private": false,
   "license": "MIT",
@@ -9,7 +9,9 @@
     "type": "git",
     "url": "https://github.com/WangShayne/vue3-signature"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/vue3-signature.umd.js",
   "module": "./dist/vue3-signature.es.js",
   "exports": {
