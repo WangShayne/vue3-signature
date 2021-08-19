@@ -11,7 +11,7 @@
 
 <script setup>
 import SignaturePad from "signature_pad";
-import {defineProps, onMounted, reactive, watch, useContext} from "vue";
+import {defineProps, onMounted, reactive, watch, defineExpose} from "vue";
 
 const props = defineProps({
   sigOption: {
@@ -164,9 +164,7 @@ onMounted(() => {
   draw();
 })
 
-const {expose} = useContext()
-
-expose({
+defineExpose({
   save,
   clear,
   isEmpty,
