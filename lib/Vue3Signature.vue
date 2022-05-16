@@ -89,8 +89,9 @@ const draw = () => {
       url = save();
     }
     let ratio = Math.max(window.devicePixelRatio || 1, 1);
-    c.width = props.w.replace(/px|%/g,"") * ratio;
-    c.height = props.h.replace(/px|%/g,"") * ratio;
+    const reg = RegExp(/px/)
+    c.width = reg.test(props.w) ? props.w.replace(/px/g, "") * ratio : c.offsetWidth * ratio;
+    c.height = reg.test(props.h) ? props.h.replace(/px/g, "") * ratio : c.offsetHeight * ratio;
     c.getContext("2d").scale(ratio, ratio);
     clear();
     !props.clearOnResize && url !== undefined && fromDataURL(url);
