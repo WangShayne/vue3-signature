@@ -11,7 +11,7 @@
 
 <script setup>
 import SignaturePad from "signature_pad";
-import {defineProps, onMounted, reactive, watch, defineExpose} from "vue";
+import {onMounted, reactive, watch, defineExpose} from "vue";
 
 const props = defineProps({
   sigOption: {
