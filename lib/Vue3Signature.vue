@@ -2,9 +2,9 @@
   <div :style="{ width: w, height: h }" @touchmove.prevent>
     <canvas
         :id="state.uid"
-        class="canvas"
         :data-uid="state.uid"
         :disabled="state.disabled"
+        :style="canvasStyle"
     ></canvas>
   </div>
 </template>
@@ -12,6 +12,11 @@
 <script setup>
 import SignaturePad from "signature_pad";
 import {onMounted, reactive, watch } from "vue";
+
+const canvasStyle = {
+  width: '100%',
+  height: '100%'
+}
 
 const props = defineProps({
   sigOption: {
@@ -176,8 +181,4 @@ defineExpose({
 </script>
 
 <style>
-canvas {
-  width: 100%;
-  height: 100%;
-}
 </style>
