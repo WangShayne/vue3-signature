@@ -7,7 +7,7 @@
     <button @click="undo">Undo</button>
     <button @click="addWaterMark">addWaterMark</button>
     <button @click="fromDataURL">fromDataURL</button>
-    <button @click="handleDisabled">disabled</button>
+    <button @click="handleToggleDisabled">ToggleDisabled</button>
 
 
 
@@ -59,7 +59,7 @@ const fromDataURL = (url) => {
   signature1.value.fromDataURL("https://avatars2.githubusercontent.com/u/17644818?s=460&v=4");
 }
 
-const handleDisabled = () => {
+const handleToggleDisabled = () => {
   state.disabled = !state.disabled
 }
 
