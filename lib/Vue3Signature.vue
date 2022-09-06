@@ -103,7 +103,7 @@ const draw = () => {
     Object.keys(props.waterMark).length && addWaterMark(props.waterMark);
   }
 
-  window.addEventListener("resize", resizeCanvas(canvas));
+  window.addEventListener("resize", () => resizeCanvas(canvas));
   resizeCanvas(canvas);
   if (props.defaultUrl !== "") {
     fromDataURL(props.defaultUrl);
