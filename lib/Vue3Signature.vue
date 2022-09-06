@@ -1,10 +1,10 @@
 <template>
   <div :style="{ width: w, height: h }" @touchmove.prevent>
     <canvas
-        :id="state.uid"
-        :data-uid="state.uid"
-        :disabled="state.disabled"
-        :style="canvasStyle"
+      :id="state.uid"
+      :data-uid="state.uid"
+      :disabled="state.disabled"
+      :style="canvasStyle"
     ></canvas>
   </div>
 </template>
@@ -18,9 +18,9 @@ import type { PropType, StyleValue } from "vue";
 import type { Watermark } from "./utils";
 
 const canvasStyle: StyleValue = {
-  width: '100%',
-  height: '100%'
-}
+  width: "100%",
+  height: "100%",
+};
 
 const props = defineProps({
   sigOption: {
@@ -57,10 +57,15 @@ const props = defineProps({
   defaultUrl: {
     type: String,
     default: "",
-  }
-})
+  },
+});
 
-let state = reactive<{ sig?: SignaturePad; option: SigOptions; uid: string; disabled?: boolean }>({
+let state = reactive<{
+  sig?: SignaturePad;
+  option: SigOptions;
+  uid: string;
+  disabled?: boolean;
+}>({
   sig: undefined,
   option: {
     backgroundColor: "rgb(255,255,255)",
@@ -71,14 +76,14 @@ let state = reactive<{ sig?: SignaturePad; option: SigOptions; uid: string; disa
 });
 
 watch(
-    () => props.disabled,
-    (val) => {
-      if (val) {
-        state.sig?.off();
-      } else {
-        state.sig?.on();
-      }
+  () => props.disabled,
+  (val) => {
+    if (val) {
+      state.sig?.off();
+    } else {
+      state.sig?.on();
     }
+  }
 );
 
 const draw = () => {
@@ -91,9 +96,13 @@ const draw = () => {
       url = save();
     }
     let ratio = Math.max(window.devicePixelRatio || 1, 1);
-    const reg = RegExp(/px/)
-    c.width = reg.test(props.w) ? Number(props.w.replace(/px/g, "")) * ratio : c.offsetWidth * ratio;
-    c.height = reg.test(props.h) ? Number(props.h.replace(/px/g, "")) * ratio : c.offsetHeight * ratio;
+    const reg = RegExp(/px/);
+    c.width = reg.test(props.w)
+      ? Number(props.w.replace(/px/g, "")) * ratio
+      : c.offsetWidth * ratio;
+    c.height = reg.test(props.h)
+      ? Number(props.h.replace(/px/g, "")) * ratio
+      : c.offsetHeight * ratio;
     c.getContext("2d").scale(ratio, ratio);
     clear();
     !props.clearOnResize && url !== undefined && fromDataURL(url);
@@ -115,7 +124,7 @@ const draw = () => {
 const clear = () => {
   state.sig.clear();
 };
-const save = (format?: 'image/jpeg' | 'image/svg+xml') => {
+const save = (format?: "image/jpeg" | "image/svg+xml") => {
   return format ? state.sig?.toDataURL(format) : state.sig?.toDataURL();
   // signaturePad.toDataURL(); // save image as PNG
   // signaturePad.toDataURL("image/jpeg"); // save image as JPEG
@@ -166,7 +175,7 @@ const addWaterMark = (data: Watermark) => {
 
 onMounted(() => {
   draw();
-})
+});
 
 defineExpose({
   save,
@@ -174,9 +183,8 @@ defineExpose({
   isEmpty,
   undo,
   addWaterMark,
-  fromDataURL
-})
+  fromDataURL,
+});
 </script>
 
-<style>
-</style>
+<style></style>
