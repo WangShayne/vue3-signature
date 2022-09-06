@@ -1,4 +1,4 @@
-interface Watermark {
+export interface Watermark {
   text?: string;
   font?: string;
   x?: number;

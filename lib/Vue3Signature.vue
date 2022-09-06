@@ -15,6 +15,7 @@ import { onMounted, reactive, watch } from "vue";
 
 import type { Options as SigOptions } from "signature_pad";
 import type { PropType, StyleValue } from "vue";
+import type { Watermark } from "./utils";
 
 const canvasStyle: StyleValue = {
   width: '100%',
