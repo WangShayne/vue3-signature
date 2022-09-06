@@ -79,9 +79,9 @@ watch(
   () => props.disabled,
   (val) => {
     if (val) {
-      state.sig?.off();
+      state.sig.off();
     } else {
-      state.sig?.on();
+      state.sig.on();
     }
   }
 );
@@ -125,22 +125,22 @@ const clear = () => {
   state.sig.clear();
 };
 const save = (format?: "image/jpeg" | "image/svg+xml") => {
-  return format ? state.sig?.toDataURL(format) : state.sig?.toDataURL();
+  return format ? state.sig.toDataURL(format) : state.sig.toDataURL();
   // signaturePad.toDataURL(); // save image as PNG
   // signaturePad.toDataURL("image/jpeg"); // save image as JPEG
   // signaturePad.toDataURL("image/svg+xml"); // save image as SVG
 };
 const fromDataURL = (url: string) => {
-  state.sig?.fromDataURL(url);
+  state.sig.fromDataURL(url);
 };
 const isEmpty = () => {
-  return state.sig?.isEmpty();
+  return state.sig.isEmpty();
 };
 const undo = () => {
-  let data = state.sig?.toData();
+  let data = state.sig.toData();
   if (data) {
     data.pop();
-    state.sig?.fromData(data);
+    state.sig.fromData(data);
   }
 };
 const addWaterMark = (data: Watermark) => {
