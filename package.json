@@ -1,7 +1,7 @@
 {
   "name": "vue3-signature",
   "description": "Electronic signature for Vue3",
-  "version": "0.1.20",
+  "version": "0.2.1",
   "author": "Shayne Wang <1614565666@qq.com>",
   "private": false,
   "license": "MIT",
@@ -14,15 +14,18 @@
   ],
   "main": "./dist/vue3-signature.umd.js",
   "module": "./dist/vue3-signature.es.js",
+  "types": "./types/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/vue3-signature.es.js",
-      "require": "./dist/vue3-signature.umd.js"
+      "require": "./dist/vue3-signature.umd.js",
+      "types": "./types/index.d.ts"
     }
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && yarn build:tsc",
+    "build:tsc": "vue-tsc --emitDeclarationOnly",
     "serve": "vite preview"
   },
   "dependencies": {
@@ -33,6 +36,8 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.1.5",
     "@vue/compiler-sfc": "^3.0.5",
-    "vite": "^2.1.0"
+    "typescript": "^4.8.2",
+    "vite": "^2.1.0",
+    "vue-tsc": "^0.40.8"
   }
 }

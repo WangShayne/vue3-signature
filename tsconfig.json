@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "jsx": "preserve",
+    "types": ["@vue/runtime-dom", "vite/client"],
+    "declaration": true,
+    "outDir": "./types",
+    "importsNotUsedAsValues": "error",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "strictNullChecks": false,
+    "skipLibCheck": true
+  },
+  "include": ["lib/**/*.ts", "lib/**/*.vue"]
+}

@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [vue()],
   build: {
     lib: {
-      entry: path.resolve(__dirname, "./lib/index.js"),
+      entry: path.resolve(__dirname, "./lib/index.ts"),
       name: "vue3-signature",
     },
     rollupOptions: {
