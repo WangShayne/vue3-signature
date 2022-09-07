@@ -1,6 +1,8 @@
 import Vue3Signature from "./Vue3Signature.vue";
 
-const install = (app) => {
+import type { App } from "vue";
+
+const install = (app: App) => {
     app.component("Vue3Signature", Vue3Signature);
 }
 
