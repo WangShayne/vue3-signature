@@ -1,26 +1,30 @@
 <template>
   <div :style="{ width: w, height: h }" @touchmove.prevent>
     <canvas
-        :id="state.uid"
-        :data-uid="state.uid"
-        :disabled="state.disabled"
-        :style="canvasStyle"
+      :id="state.uid"
+      :data-uid="state.uid"
+      :disabled="state.disabled"
+      :style="canvasStyle"
     ></canvas>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import SignaturePad from "signature_pad";
-import {onMounted, reactive, watch } from "vue";
+import { onMounted, reactive, watch } from "vue";
 
-const canvasStyle = {
-  width: '100%',
-  height: '100%'
-}
+import type { Options as SigOptions } from "signature_pad";
+import type { PropType, StyleValue } from "vue";
+import type { Watermark } from "./utils";
+
+const canvasStyle: StyleValue = {
+  width: "100%",
+  height: "100%",
+};
 
 const props = defineProps({
   sigOption: {
-    type: Object,
+    type: Object as PropType<SigOptions>,
     default: () => {
       return {
         backgroundColor: "rgb(255,255,255)",
@@ -41,7 +45,7 @@ const props = defineProps({
     default: false,
   },
   waterMark: {
-    type: Object,
+    type: Object as PropType<Watermark>,
     default: () => {
       return {};
     },
@@ -53,57 +57,59 @@ const props = defineProps({
   defaultUrl: {
     type: String,
     default: "",
-  }
-})
-
-let state = reactive({
-  sig: () => {
   },
+});
+
+let state = reactive<{
+  sig?: SignaturePad;
+  option: SigOptions;
+  uid: string;
+  disabled?: boolean;
+}>({
+  sig: undefined,
   option: {
     backgroundColor: "rgb(255,255,255)",
     penColor: "rgb(0, 0, 0)",
+    ...props.sigOption,
   },
-  uid: "",
+  uid: "canvas" + Math.random(),
 });
 
-state.uid = "canvas" + Math.random();
-
-let sigOptions = Object.keys(props.sigOption);
-for (let item of sigOptions) {
-  state.option[item] = props.sigOption[item];
-}
-
 watch(
-    () => props.disabled,
-    (val) => {
-      if (val) {
-        state.sig.off();
-      } else {
-        state.sig.on();
-      }
+  () => props.disabled,
+  (val) => {
+    if (val) {
+      state.sig.off();
+    } else {
+      state.sig.on();
     }
+  }
 );
 
 const draw = () => {
-  let canvas = document.getElementById(state.uid);
+  let canvas = document.getElementById(state.uid) as HTMLCanvasElement;
   state.sig = new SignaturePad(canvas, state.option);
 
-  function resizeCanvas(c) {
+  function resizeCanvas(c: HTMLCanvasElement) {
     let url;
     if (!isEmpty()) {
       url = save();
     }
     let ratio = Math.max(window.devicePixelRatio || 1, 1);
-    const reg = RegExp(/px/)
-    c.width = reg.test(props.w) ? props.w.replace(/px/g, "") * ratio : c.offsetWidth * ratio;
-    c.height = reg.test(props.h) ? props.h.replace(/px/g, "") * ratio : c.offsetHeight * ratio;
+    const reg = RegExp(/px/);
+    c.width = reg.test(props.w)
+      ? Number(props.w.replace(/px/g, "")) * ratio
+      : c.offsetWidth * ratio;
+    c.height = reg.test(props.h)
+      ? Number(props.h.replace(/px/g, "")) * ratio
+      : c.offsetHeight * ratio;
     c.getContext("2d").scale(ratio, ratio);
     clear();
     !props.clearOnResize && url !== undefined && fromDataURL(url);
     Object.keys(props.waterMark).length && addWaterMark(props.waterMark);
   }
 
-  window.addEventListener("resize", resizeCanvas(canvas));
+  window.addEventListener("resize", () => resizeCanvas(canvas));
   resizeCanvas(canvas);
   if (props.defaultUrl !== "") {
     fromDataURL(props.defaultUrl);
@@ -118,13 +124,13 @@ const draw = () => {
 const clear = () => {
   state.sig.clear();
 };
-const save = (format) => {
+const save = (format?: "image/jpeg" | "image/svg+xml") => {
   return format ? state.sig.toDataURL(format) : state.sig.toDataURL();
   // signaturePad.toDataURL(); // save image as PNG
   // signaturePad.toDataURL("image/jpeg"); // save image as JPEG
   // signaturePad.toDataURL("image/svg+xml"); // save image as SVG
 };
-const fromDataURL = (url) => {
+const fromDataURL = (url: string) => {
   state.sig.fromDataURL(url);
 };
 const isEmpty = () => {
@@ -137,11 +143,11 @@ const undo = () => {
     state.sig.fromData(data);
   }
 };
-const addWaterMark = (data) => {
+const addWaterMark = (data: Watermark) => {
   if (!(Object.prototype.toString.call(data) == "[object Object]")) {
     throw new Error("Expected Object, got " + typeof data + ".");
   } else {
-    let vCanvas = document.getElementById(state.uid);
+    let vCanvas = document.getElementById(state.uid) as HTMLCanvasElement;
     let textData = {
       text: data.text || "",
       x: data.x || 20,
@@ -162,13 +168,14 @@ const addWaterMark = (data) => {
     } else {
       ctx.fillText(textData.text, textData.x, textData.y);
     }
-    state.sig._isEmpty = false;
+    // `_isEmpty` is a private property of SignaturePad, so we have to ignore here.
+    (state.sig as any)._isEmpty = false;
   }
 };
 
 onMounted(() => {
   draw();
-})
+});
 
 defineExpose({
   save,
@@ -176,9 +183,8 @@ defineExpose({
   isEmpty,
   undo,
   addWaterMark,
-  fromDataURL
-})
+  fromDataURL,
+});
 </script>
 
-<style>
-</style>
+<style></style>
