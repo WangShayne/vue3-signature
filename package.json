@@ -13,11 +13,11 @@
     "dist"
   ],
   "main": "./dist/vue3-signature.umd.js",
-  "module": "./dist/vue3-signature.es.js",
+  "module": "./dist/vue3-signature.mjs",
   "types": "./types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/vue3-signature.es.js",
+      "import": "./dist/vue3-signature.mjs",
       "require": "./dist/vue3-signature.umd.js",
       "types": "./types/index.d.ts"
     }
