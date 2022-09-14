@@ -10,7 +10,8 @@
     "url": "https://github.com/WangShayne/vue3-signature"
   },
   "files": [
-    "dist"
+    "dist",
+    "types"
   ],
   "main": "./dist/vue3-signature.umd.js",
   "module": "./dist/vue3-signature.es.js",
