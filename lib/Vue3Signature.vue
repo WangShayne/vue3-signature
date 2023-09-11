@@ -22,6 +22,9 @@ const canvasStyle: StyleValue = {
   height: "100%",
 };
 
+
+const emit = defineEmits(['begin', 'end'])
+
 const props = defineProps({
   sigOption: {
     type: Object as PropType<SigOptions>,
@@ -89,6 +92,8 @@ watch(
 const draw = () => {
   let canvas = document.getElementById(state.uid) as HTMLCanvasElement;
   state.sig = new SignaturePad(canvas, state.option);
+  state.sig.onBegin = (evt) => emit('begin');
+  state.sig.onEnd = (evt) => emit('end');
 
   function resizeCanvas(c: HTMLCanvasElement) {
     let url;
