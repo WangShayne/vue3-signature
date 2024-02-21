@@ -192,4 +192,10 @@ defineExpose({
 });
 </script>
 
+
+<script lang="ts">
+export default {
+  name: 'Vue3Signature'
+}
+</script>
 <style></style>
