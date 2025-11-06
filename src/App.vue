@@ -27,7 +27,7 @@
       <div class="controls-section">
         <div class="control-group">
           <label>Pen Color:</label>
-          <input type="color" v-model="options.penColor" class="color-input" />
+          <input type="color" v-model="penColorHex" class="color-input" />
           <span class="color-value">{{ options.penColor }}</span>
         </div>
 
@@ -35,7 +35,7 @@
           <label>Background:</label>
           <input
             type="color"
-            v-model="options.backgroundColor"
+            v-model="backgroundColorHex"
             class="color-input"
           />
           <span class="color-value">{{ options.backgroundColor }}</span>
@@ -163,7 +163,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, watch } from "vue";
 import Vue3Signature from "./components/Vue3Signature.vue";
 
 const signature = ref(null);
@@ -171,14 +171,42 @@ const preview = ref("");
 const isDisabled = ref(false);
 const imageUrl = ref("");
 
+// Color values for color inputs (hex format)
+const penColorHex = ref("#000000");
+const backgroundColorHex = ref("#ffffff");
+
+// Options for signature pad (RGB format)
 const options = reactive({
   penColor: "rgb(0, 0, 0)",
   backgroundColor: "rgb(255, 255, 255)",
 });
 
+// Convert hex to RGB
+const hexToRgb = (hex) => {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? `rgb(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)})`
+    : null;
+};
+
+// Watch color changes and update options
+watch(penColorHex, (newColor) => {
+  const rgb = hexToRgb(newColor);
+  if (rgb) {
+    options.penColor = rgb;
+  }
+});
+
+watch(backgroundColorHex, (newColor) => {
+  const rgb = hexToRgb(newColor);
+  if (rgb) {
+    options.backgroundColor = rgb;
+  }
+});
+
 // Sample images (base64 data URLs or external URLs)
 const sampleImages = {
-  signature: "https://raw.githubusercontent.com/szimek/signature_pad/master/docs/images/sample.png",
+  signature: "https://avatars.githubusercontent.com/u/17644818?v=4",
   drawing: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNNTAgMTAwIFEgMTAwIDUwIDIwMCAxMDAgVCAzNTAgMTAwIiBzdHJva2U9ImJsYWNrIiBmaWxsPSJub25lIiBzdHJva2Utd2lkdGg9IjMiLz48L3N2Zz4=",
 };
 
