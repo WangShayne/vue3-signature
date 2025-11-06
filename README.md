@@ -35,6 +35,15 @@ Experience Vue3 Signature without any installation:
 
 Want to deploy your own demo? Check out our [Deployment Guide](./DEPLOY.md) for detailed instructions on deploying to GitHub Pages.
 
+### 📁 New: Image Import Feature
+
+The live demo now supports **importing images**:
+- 📁 Upload local image files
+- 🔗 Load images from URLs
+- 🖼️ Try sample images with one click
+
+Perfect for editing existing signatures, adding annotations, or working with templates!
+
 ## ✨ Features
 
 ### 🎯 Core Technology
