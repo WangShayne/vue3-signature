@@ -1,6 +1,11 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-const path = require("path");
+import { resolve } from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
@@ -10,7 +15,7 @@ export default defineConfig(({ command, mode }) => {
       plugins: [vue()],
       build: {
         lib: {
-          entry: path.resolve(__dirname, "./lib/index.ts"),
+          entry: resolve(__dirname, "./lib/index.ts"),
           name: "vue3-signature",
         },
         rollupOptions: {
