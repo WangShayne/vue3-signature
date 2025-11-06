@@ -1,13 +1,13 @@
 {
   "name": "vue3-signature",
   "description": "Electronic signature for Vue3",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "author": "Shayne Wang <1614565666@qq.com>",
   "private": false,
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/WangShayne/vue3-signature"
+    "url": "git+https://github.com/WangShayne/vue3-signature.git"
   },
   "files": [
     "dist",
@@ -25,8 +25,10 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build && yarn build:tsc",
+    "build": "vite build --mode lib && npm run build:tsc",
     "build:tsc": "vue-tsc --emitDeclarationOnly",
+    "build:demo": "vite build",
+    "preview": "vite preview",
     "serve": "vite preview"
   },
   "peerDependencies": {
@@ -34,7 +36,7 @@
   },
   "dependencies": {
     "default-passive-events": "^2.0.0",
-    "signature_pad": "^3.0.0-beta.4",
+    "signature_pad": "^5.1.1",
     "vue": "^3.2.37"
   },
   "devDependencies": {

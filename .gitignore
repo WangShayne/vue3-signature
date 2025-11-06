@@ -1,5 +1,23 @@
+# Dependencies
 /node_modules/*
+
+# OS files
 .DS_Store
+
+# Build outputs
 dist-ssr
 /types
 *.local
+
+# GitHub Pages build output
+# Uncomment the line below if using GitHub Actions for deployment
+# (GitHub Actions builds on CI, no need to commit docs folder)
+# /docs
+
+# Keep docs folder commented out if using manual deployment
+# (Manual deployment requires committing the docs folder)
+DEPLOY.md
+DEPLOY.zh-CN.md
+QUICK_DEPLOY.md
+QUICK_DEPLOY.zh-CN.md
+DEPLOYMENT_SUMMARY.md

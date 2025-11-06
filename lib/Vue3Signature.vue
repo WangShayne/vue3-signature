@@ -92,8 +92,9 @@ watch(
 const draw = () => {
   let canvas = document.getElementById(state.uid) as HTMLCanvasElement;
   state.sig = new SignaturePad(canvas, state.option);
-  state.sig.onBegin = (evt) => emit('begin');
-  state.sig.onEnd = (evt) => emit('end');
+  // Set event callbacks
+  (state.sig as any).onBegin = () => emit('begin');
+  (state.sig as any).onEnd = () => emit('end');
 
   function resizeCanvas(c: HTMLCanvasElement) {
     let url;
@@ -108,7 +109,10 @@ const draw = () => {
     c.height = reg.test(props.h)
       ? Number(props.h.replace(/px/g, "")) * ratio
       : c.offsetHeight * ratio;
-    c.getContext("2d").scale(ratio, ratio);
+    const ctx = c.getContext("2d");
+    if (ctx) {
+      ctx.scale(ratio, ratio);
+    }
     clear();
     !props.clearOnResize && url !== undefined && fromDataURL(url);
     Object.keys(props.waterMark).length && addWaterMark(props.waterMark);
@@ -162,6 +166,8 @@ const addWaterMark = (data: Watermark) => {
     };
 
     let ctx = vCanvas.getContext("2d");
+    if (!ctx) return;
+    
     ctx.font = data.font || "20px sans-serif";
     ctx.fillStyle = data.fillStyle || "#333";
     ctx.strokeStyle = data.strokeStyle || "#333";

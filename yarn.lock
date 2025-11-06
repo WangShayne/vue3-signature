@@ -321,10 +321,10 @@ semver@^7.5.4:
   dependencies:
     lru-cache "^6.0.0"
 
-signature_pad@^3.0.0-beta.4:
-  version "3.0.0-beta.4"
-  resolved "https://registry.npmjs.org/signature_pad/-/signature_pad-3.0.0-beta.4.tgz"
-  integrity sha512-cOf2NhVuTiuNqe2X/ycEmizvCDXk0DoemhsEpnkcGnA4kS5iJYTCqZ9As7tFBbsch45Q1EdX61833+6sjJ8rrw==
+signature_pad@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/signature_pad/-/signature_pad-5.1.1.tgz#0bf3c7341c91b119a17d8afdc7206ad9fc991aa6"
+  integrity sha512-BT5JJygS5BS0oV+tffPRorIud6q17bM7v/1LdQwd0o6mTqGoI25yY1NjSL99OqkekWltS4uon6p52Y8j1Zqu7g==
 
 source-map-js@^1.0.2:
   version "1.0.2"
