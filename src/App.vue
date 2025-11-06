@@ -77,6 +77,56 @@
         </button>
       </div>
 
+      <div class="import-section">
+        <h3>Import Image</h3>
+        
+        <div class="import-controls">
+          <div class="import-method">
+            <label>📁 Upload Local Image:</label>
+            <input
+              type="file"
+              accept="image/*"
+              @change="handleFileUpload"
+              class="file-input"
+            />
+          </div>
+
+          <div class="import-method">
+            <label>🔗 Load from URL:</label>
+            <div class="url-input-group">
+              <input
+                type="text"
+                v-model="imageUrl"
+                placeholder="Enter image URL..."
+                class="url-input"
+                @keyup.enter="loadFromUrl"
+              />
+              <button @click="loadFromUrl" class="btn btn-secondary">
+                Load
+              </button>
+            </div>
+          </div>
+
+          <div class="import-method">
+            <label>🖼️ Try Sample Images:</label>
+            <div class="sample-buttons">
+              <button
+                @click="loadSampleImage('signature')"
+                class="btn btn-outline"
+              >
+                Sample Signature
+              </button>
+              <button
+                @click="loadSampleImage('drawing')"
+                class="btn btn-outline"
+              >
+                Sample Drawing
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div v-if="preview" class="preview-section">
         <h3>Preview</h3>
         <img :src="preview" alt="Signature preview" class="preview-image" />
@@ -91,6 +141,8 @@
           <li>🔄 Undo support</li>
           <li>🖼️ Watermark support</li>
           <li>🚫 Read-only mode</li>
+          <li>📁 Import local images</li>
+          <li>🔗 Load images from URL</li>
         </ul>
       </div>
     </main>
@@ -117,11 +169,18 @@ import Vue3Signature from "./components/Vue3Signature.vue";
 const signature = ref(null);
 const preview = ref("");
 const isDisabled = ref(false);
+const imageUrl = ref("");
 
 const options = reactive({
   penColor: "rgb(0, 0, 0)",
   backgroundColor: "rgb(255, 255, 255)",
 });
+
+// Sample images (base64 data URLs or external URLs)
+const sampleImages = {
+  signature: "https://raw.githubusercontent.com/szimek/signature_pad/master/docs/images/sample.png",
+  drawing: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNNTAgMTAwIFEgMTAwIDUwIDIwMCAxMDAgVCAzNTAgMTAwIiBzdHJva2U9ImJsYWNrIiBmaWxsPSJub25lIiBzdHJva2Utd2lkdGg9IjMiLz48L3N2Zz4=",
+};
 
 const save = (format) => {
   if (signature.value.isEmpty()) {
@@ -159,6 +218,80 @@ const addWatermark = () => {
     x: 10,
     y: 30,
   });
+};
+
+// Handle local file upload
+const handleFileUpload = (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  if (!file.type.startsWith("image/")) {
+    alert("Please select an image file.");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    loadImageToCanvas(dataUrl);
+  };
+  reader.readAsDataURL(file);
+  
+  // Clear the input so the same file can be selected again
+  event.target.value = "";
+};
+
+// Load image from URL
+const loadFromUrl = () => {
+  if (!imageUrl.value.trim()) {
+    alert("Please enter an image URL.");
+    return;
+  }
+
+  // For external URLs, we need to convert to data URL due to CORS
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+  
+  img.onload = () => {
+    // Convert to data URL
+    const canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+    const dataUrl = canvas.toDataURL();
+    loadImageToCanvas(dataUrl);
+  };
+  
+  img.onerror = () => {
+    alert("Failed to load image. Please check the URL or try a different image.");
+  };
+  
+  img.src = imageUrl.value;
+};
+
+// Load sample image
+const loadSampleImage = (type) => {
+  const url = sampleImages[type];
+  if (url.startsWith("data:")) {
+    // Direct data URL
+    loadImageToCanvas(url);
+  } else {
+    // External URL
+    imageUrl.value = url;
+    loadFromUrl();
+  }
+};
+
+// Load image to canvas
+const loadImageToCanvas = (dataUrl) => {
+  try {
+    signature.value.fromDataURL(dataUrl);
+    preview.value = "";
+  } catch (error) {
+    alert("Failed to load image to canvas. Please try another image.");
+    console.error(error);
+  }
 };
 </script>
 
@@ -361,6 +494,115 @@ body {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+.import-section {
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 2px dashed #ddd;
+}
+
+.import-section h3 {
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-size: 1.3rem;
+}
+
+.import-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.import-method {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.import-method label {
+  font-weight: 600;
+  color: #555;
+  font-size: 1rem;
+}
+
+.file-input {
+  padding: 0.75rem;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.file-input:hover {
+  border-color: #667eea;
+  background: #f0f0ff;
+}
+
+.file-input::-webkit-file-upload-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  margin-right: 1rem;
+  transition: all 0.3s ease;
+}
+
+.file-input::-webkit-file-upload-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
+.url-input-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.url-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.url-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.sample-buttons {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btn-outline {
+  padding: 0.75rem 1.5rem;
+  border: 2px solid #667eea;
+  background: white;
+  color: #667eea;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-outline:hover {
+  background: #667eea;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
 .info-section {
   padding: 2rem;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -420,6 +662,26 @@ body {
   .controls-section {
     flex-direction: column;
     gap: 1rem;
+  }
+
+  .import-section {
+    padding: 1.5rem;
+  }
+
+  .import-section h3 {
+    font-size: 1.1rem;
+  }
+
+  .url-input-group {
+    flex-direction: column;
+  }
+
+  .sample-buttons {
+    flex-direction: column;
+  }
+
+  .btn-outline {
+    width: 100%;
   }
 
   .info-section ul {
