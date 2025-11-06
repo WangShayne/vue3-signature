@@ -20,6 +20,8 @@ const props = defineProps({
       return {
         backgroundColor: "rgb(255,255,255)",
         penColor: "rgb(0, 0, 0)",
+        minWidth: 2.5,
+        maxWidth: 2.5,
       };
     },
   },
@@ -57,6 +59,8 @@ let state = reactive({
   option: {
     backgroundColor: "rgb(255,255,255)",
     penColor: "rgb(0, 0, 0)",
+    minWidth: 2.5,
+    maxWidth: 2.5,
   },
   uid: "",
 });
@@ -75,6 +79,58 @@ watch(
         state.sig.off();
       } else {
         state.sig.on();
+      }
+    }
+);
+
+watch(
+    () => props.sigOption.penColor,
+    (color) => {
+      if (!color) return;
+      state.option.penColor = color;
+      if (!state.sig || typeof state.sig !== "object") return;
+      if (state.sig.penColor === color) return;
+      state.sig.penColor = color;
+    }
+);
+
+watch(
+    () => [props.sigOption.minWidth, props.sigOption.maxWidth],
+    ([minWidth, maxWidth]) => {
+      if (typeof minWidth !== "number" || typeof maxWidth !== "number") {
+        return;
+      }
+      state.option.minWidth = minWidth;
+      state.option.maxWidth = maxWidth;
+      if (!state.sig || typeof state.sig.toData !== "function") {
+        return;
+      }
+      const penWidthChanged =
+        state.sig.minWidth !== minWidth || state.sig.maxWidth !== maxWidth;
+      if (!penWidthChanged) return;
+      const strokes = state.sig.toData();
+      state.sig.minWidth = minWidth;
+      state.sig.maxWidth = maxWidth;
+      if (!strokes.length) {
+        return;
+      }
+      state.sig.fromData(strokes);
+    }
+);
+
+watch(
+    () => props.sigOption.backgroundColor,
+    (color) => {
+      if (!color) return;
+      state.option.backgroundColor = color;
+      if (!state.sig || typeof state.sig !== "object") return;
+      if (state.sig.backgroundColor === color) return;
+      const existingData = state.sig.toData();
+      const hadSignature = !state.sig.isEmpty();
+      state.sig.backgroundColor = color;
+      state.sig.clear();
+      if (hadSignature && existingData.length) {
+        state.sig.fromData(existingData);
       }
     }
 );

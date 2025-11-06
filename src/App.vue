@@ -32,6 +32,19 @@
         </div>
 
         <div class="control-group">
+          <label>Pen Width:</label>
+          <input
+            type="range"
+            min="1"
+            max="10"
+            step="0.5"
+            v-model.number="penWidth"
+            class="range-input"
+          />
+          <span class="color-value">{{ penWidth.toFixed(1) }}px</span>
+        </div>
+
+        <div class="control-group">
           <label>Background:</label>
           <input
             type="color"
@@ -174,11 +187,14 @@ const imageUrl = ref("");
 // Color values for color inputs (hex format)
 const penColorHex = ref("#000000");
 const backgroundColorHex = ref("#ffffff");
+const penWidth = ref(2.5);
 
 // Options for signature pad (RGB format)
 const options = reactive({
   penColor: "rgb(0, 0, 0)",
   backgroundColor: "rgb(255, 255, 255)",
+  minWidth: penWidth.value,
+  maxWidth: penWidth.value,
 });
 
 // Convert hex to RGB
@@ -202,6 +218,15 @@ watch(backgroundColorHex, (newColor) => {
   if (rgb) {
     options.backgroundColor = rgb;
   }
+});
+
+watch(penWidth, (newWidth) => {
+  if (!Number.isFinite(newWidth)) {
+    return;
+  }
+  const width = Math.max(newWidth, 1);
+  options.minWidth = width;
+  options.maxWidth = width;
 });
 
 // Sample images (base64 data URLs or external URLs)
@@ -431,6 +456,11 @@ body {
 
 .color-input:hover {
   border-color: #667eea;
+}
+
+.range-input {
+  flex: 1;
+  margin: 0 12px;
 }
 
 .color-value {
