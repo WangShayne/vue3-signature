@@ -88,6 +88,9 @@
         <button @click="addWatermark" class="btn btn-secondary">
           🔖 Watermark
         </button>
+        <button @click="generateTrimmedPreview" class="btn btn-secondary">
+          ✂️ Trim Whitespace
+        </button>
       </div>
 
       <div class="import-section">
@@ -145,6 +148,15 @@
         <img :src="preview" alt="Signature preview" class="preview-image" />
       </div>
 
+      <div v-if="trimmedPreview" class="preview-section">
+        <h3>Trimmed Preview (no whitespace)</h3>
+        <img
+          :src="trimmedPreview"
+          alt="Trimmed signature preview"
+          class="preview-image"
+        />
+      </div>
+
       <div class="info-section">
         <h3>Features</h3>
         <ul>
@@ -177,10 +189,10 @@
 
 <script setup>
 import { ref, reactive, watch } from "vue";
-import Vue3Signature from "./components/Vue3Signature.vue";
 
 const signature = ref(null);
 const preview = ref("");
+const trimmedPreview = ref("");
 const isDisabled = ref(false);
 const imageUrl = ref("");
 
@@ -256,6 +268,7 @@ const save = (format) => {
 const clear = () => {
   signature.value.clear();
   preview.value = "";
+  trimmedPreview.value = "";
 };
 
 const undo = () => {
@@ -271,6 +284,19 @@ const addWatermark = () => {
     x: 10,
     y: 30,
   });
+};
+
+const generateTrimmedPreview = () => {
+  if (signature.value.isEmpty()) {
+    alert("Please provide a signature first.");
+    return;
+  }
+  const result = signature.value.trim();
+  if (!result) {
+    alert("Unable to trim the current signature.");
+    return;
+  }
+  trimmedPreview.value = result.dataUrl;
 };
 
 // Handle local file upload

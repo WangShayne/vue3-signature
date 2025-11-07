@@ -151,29 +151,65 @@ const undo = () => {
 | `disabled`      | `Boolean` | `false`                                                           | Disable/enable signature input                                        |
 | `defaultUrl`    | `String`  | `""`                                                              | Default image URL to display on canvas                                |
 
+> 💡 `sigOption` accepts the full [`SignaturePad.Options`](https://github.com/szimek/signature_pad#options) interface. The component watches it deeply and recreates the pad with your new settings while preserving the current drawing whenever possible.
+
 ### Methods
 
-Access these methods via component ref:
+Access these methods via the component ref — every public method from `signature_pad` is available:
 
-| Method           | Parameters        | Return    | Description                                                                                     |
-| ---------------- | ----------------- | --------- | ----------------------------------------------------------------------------------------------- |
-| `save()`         | `format?: string` | `string`  | Save signature as data URL. Formats: `"image/png"` (default), `"image/jpeg"`, `"image/svg+xml"` |
-| `clear()`        | -                 | `void`    | Clear the entire canvas                                                                         |
-| `isEmpty()`      | -                 | `boolean` | Check if canvas is empty                                                                        |
-| `undo()`         | -                 | `void`    | Remove the last stroke                                                                          |
-| `fromDataURL()`  | `url: string`     | `void`    | Load signature from data URL                                                                    |
-| `addWaterMark()` | `options: Object` | `void`    | Add watermark to canvas (see [Watermark Options](#watermark-options))                           |
+| Method                            | Parameters                                                                 | Return      | Description                                                                                                                       |
+| --------------------------------- | -------------------------------------------------------------------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `save(format?, encoderOptions?)`  | `format?: string`, `encoderOptions?: number \| ToSVGOptions`               | `string`    | Alias of `toDataURL()` for backwards compatibility.                                                                               |
+| `toDataURL(format?, encoderOptions?)` | Same as `SignaturePad#toDataURL`                                            | `string`    | Export the drawing as PNG/JPEG/SVG (see MDN for encoder options).                                                                  |
+| `toSVG(options?)`                 | `options?: ToSVGOptions`                                                   | `string`    | Export the SVG string with optional background/data URL layers.                                                                   |
+| `clear()`                         | -                                                                          | `void`      | Clear the canvas using the current background color.                                                                              |
+| `redraw()`                        | -                                                                          | `void`      | Re-render the stored strokes and any data URL that was imported.                                                                  |
+| `isEmpty()`                       | -                                                                          | `boolean`   | Check whether anything has been drawn.                                                                                            |
+| `undo(steps = 1)`                 | `steps?: number`                                                           | `void`      | Remove the last stroke(s) and re-render the remainder.                                                                            |
+| `toData()`                        | -                                                                          | `PointGroup[]` | Read the raw stroke data from `signature_pad`.                                                                                     |
+| `fromData(pointGroups, options?)` | `pointGroups: PointGroup[]`, `options?: FromDataOptions`                   | `void`      | Draw from raw stroke data with optional clear control.                                                                            |
+| `fromDataURL(url, options?)`      | `url: string`, `options?: FromDataUrlOptions`                              | `Promise<void>` | Import an image/data URL exactly like `signature_pad`.                                                                             |
+| `addWaterMark(options)`           | `options: WaterMarkOption`                                                 | `void`      | Draw custom watermark text (utility helper provided by this component).                                                           |
+| `trim(options?)`                  | `options?: TrimOptions`                                                    | `TrimResult \| null` | Clone the canvas, crop out surrounding whitespace, and return the off-screen result without mutating the visible canvas.           |
+| `toTrimmedDataURL(format?, encoderOptions?)` | `format?: string`, `encoderOptions?: number` | `string`    | Convenience helper that returns only the cropped data URL (internally calls `trim`).                                              |
+| `enable()` / `disable()`          | -                                                                          | `void`      | Direct proxies for `signaturePad.on()` / `signaturePad.off()`.                                                                    |
+| `addEventListener(...)`           | Same signature as `EventTarget#addEventListener`                           | `void`      | Listen to low-level stroke events directly on the wrapped `SignaturePad` instance.                                                |
+| `removeEventListener(...)`        | Same signature as `EventTarget#removeEventListener`                        | `void`      | Remove listeners that were previously attached.                                                                                   |
+| `getInstance()`                   | -                                                                          | `SignaturePad \| null` | Access the underlying `SignaturePad` instance if you need complete control over every API surface.                                   |
+
+### Events
+
+All native `signature_pad` events are forwarded so you can react to drawing lifecycle changes:
+
+| Event                | Payload             | Description                                                                                 |
+| -------------------- | ------------------- | ------------------------------------------------------------------------------------------- |
+| `ready`              | `SignaturePad`      | Emitted after the canvas has been initialised/resized and the instance is ready to use.     |
+| `begin` / `end`      | `void`              | Compatibility shims for `signaturePad.onBegin` / `onEnd`.                                   |
+| `beginStroke`        | `SignatureEvent`    | Fired before a stroke starts (cancelable via `event.preventDefault()` in `signature_pad`).  |
+| `beforeUpdateStroke` | `SignatureEvent`    | Fired before a stroke segment is rendered.                                                  |
+| `afterUpdateStroke`  | `SignatureEvent`    | Fired after a stroke segment is rendered.                                                   |
+| `endStroke`          | `SignatureEvent`    | Fired after a stroke ends.                                                                  |
 
 ### Signature Options
 
 ```typescript
-interface SigOption {
-  penColor?: string; // Pen stroke color (default: "rgb(0, 0, 0)")
-  backgroundColor?: string; // Canvas background color (default: "rgb(255, 255, 255)")
-  minWidth?: number; // Minimum width of a stroke (default: 0.5)
-  maxWidth?: number; // Maximum width of a stroke (default: 2.5)
-  velocityFilterWeight?: number; // Weight for smoothing (default: 0.7)
-}
+import type { Options as SignaturePadOptions } from "signature_pad";
+
+type SigOption = SignaturePadOptions & {
+  // You can still pass anything supported by signature_pad: dotSize, min/maxWidth, throttle, minDistance, etc.
+};
+
+// Commonly used fields
+// dotSize?: number;
+// minWidth?: number;
+// maxWidth?: number;
+// minDistance?: number;
+// throttle?: number;
+// velocityFilterWeight?: number;
+// penColor?: string;
+// backgroundColor?: string;
+// compositeOperation?: GlobalCompositeOperation;
+// canvasContextOptions?: CanvasRenderingContext2DSettings;
 ```
 
 ### Watermark Options
@@ -189,6 +225,22 @@ interface WaterMarkOption {
   y?: number; // Fill text Y position (default: 20)
   sx?: number; // Stroke text X position (default: 40)
   sy?: number; // Stroke text Y position (default: 40)
+}
+```
+
+### Trim Result & Options
+
+```typescript
+interface TrimResult {
+  canvas: HTMLCanvasElement;            // The cropped off-screen canvas
+  dataUrl: string;                     // Convenience data URL generated from the cropped canvas
+  bounds: { x: number; y: number; width: number; height: number }; // Crop rectangle (device pixels)
+}
+
+interface TrimOptions {
+  format?: string;         // Any value accepted by canvas.toDataURL, e.g. "image/png", "image/jpeg"
+  encoderOptions?: number; // Quality argument for JPEG/WebP
+  backgroundColor?: string;// Override the color used to detect empty pixels (defaults to SignaturePad.backgroundColor)
 }
 ```
 
@@ -677,3 +729,25 @@ Copyright (c) 2024 Shayne Wang
   <br>
   If this project helped you, please consider giving it a ⭐️
 </div>
+### Remove Blank Space Around the Signature
+
+```vue
+<template>
+  <Vue3Signature ref="signature" :w="'600px'" :h="'250px'" @end="captureTrimmed" />
+  <img v-if="trimmed" :src="trimmed" alt="Trimmed signature" />
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const signature = ref(null);
+const trimmed = ref("");
+
+const captureTrimmed = () => {
+  const result = signature.value.trim();
+  trimmed.value = result?.dataUrl ?? "";
+};
+</script>
+```
+
+The implementation is based on the [popular workaround described here](https://github.com/szimek/signature_pad/issues/49#issuecomment-260976909): the component copies the current canvas, crops out the empty pixels, and returns the cropped data URL without mutating the visible canvas. Use it on `@end` to keep a continuously trimmed value if needed.

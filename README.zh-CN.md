@@ -151,29 +151,61 @@ const undo = () => {
 | `disabled`      | `Boolean` | `false`                                                           | 禁用/启用签名输入                     |
 | `defaultUrl`    | `String`  | `""`                                                              | 要在画布上显示的默认图像 URL          |
 
+> 💡 `sigOption` 支持 [`signature_pad` 提供的全部参数](https://github.com/szimek/signature_pad#options)。组件会深度监听该对象，自动重建签名板并尽量保留当前笔画。
+
 ### 方法
 
-通过组件 ref 访问这些方法：
+通过组件 ref 可以访问 `signature_pad` 的所有公开 API：
 
-| 方法             | 参数              | 返回值    | 描述                                                                           |
-| ---------------- | ----------------- | --------- | ------------------------------------------------------------------------------ |
-| `save()`         | `format?: string` | `string`  | 将签名保存为 data URL。格式：`"image/png"`（默认）、`"image/jpeg"`、`"image/svg+xml"` |
-| `clear()`        | -                 | `void`    | 清空整个画布                                                                   |
-| `isEmpty()`      | -                 | `boolean` | 检查画布是否为空                                                               |
-| `undo()`         | -                 | `void`    | 移除最后一笔                                                                   |
-| `fromDataURL()`  | `url: string`     | `void`    | 从 data URL 加载签名                                                           |
-| `addWaterMark()` | `options: Object` | `void`    | 向画布添加水印（参见[水印选项](#水印选项)）                                    |
+| 方法                              | 参数                                                                            | 返回值          | 描述                                                                                                   |
+| --------------------------------- | ------------------------------------------------------------------------------- | --------------- | ------------------------------------------------------------------------------------------------------ |
+| `save(format?, encoderOptions?)`  | 同 `toDataURL`                                                                  | `string`        | `toDataURL` 的兼容别名，方便旧版本升级。                                                               |
+| `toDataURL(format?, encoderOptions?)` | 与 `signature_pad#toDataURL` 完全一致                                              | `string`        | 按 PNG/JPEG/SVG 导出签名，支持传入编码参数。                                                           |
+| `toSVG(options?)`                 | `options?: ToSVGOptions`                                                        | `string`        | 输出 SVG 字符串，可选包含背景色或 `fromDataURL` 导入的图片。                                           |
+| `clear()`                         | -                                                                               | `void`          | 使用当前背景色清空画布。                                                                               |
+| `redraw()`                        | -                                                                               | `void`          | 重新渲染当前保存的笔画/导入的图片。                                                                   |
+| `isEmpty()`                       | -                                                                               | `boolean`       | 判断画布是否为空。                                                                                     |
+| `undo(steps = 1)`                 | `steps?: number`                                                                | `void`          | 撤销最近的若干笔画。                                                                                   |
+| `toData()`                        | -                                                                               | `PointGroup[]`  | 获取 `signature_pad` 的原始笔画数据。                                                                  |
+| `fromData(pointGroups, options?)` | `pointGroups: PointGroup[]`, `options?: FromDataOptions`                        | `void`          | 根据原始笔画数据绘制，可控制是否清空画布。                                                             |
+| `fromDataURL(url, options?)`      | `url: string`, `options?: FromDataUrlOptions`                                   | `Promise<void>` | 与 `signature_pad#fromDataURL` 完全一致的导入能力。                                                     |
+| `addWaterMark(options)`           | `options: WaterMarkOption`                                                      | `void`          | 便捷水印工具，保留原有功能。                                                                           |
+| `trim(options?)`                  | `options?: TrimOptions`                                                         | `TrimResult \| null` | 克隆画布、裁剪留白并返回离屏结果，不会影响用户看到的内容。                                   |
+| `toTrimmedDataURL(format?, encoderOptions?)` | `format?: string`, `encoderOptions?: number`                           | `string`        | 仅返回裁剪后的 data URL，内部复用 `trim`。                                                               |
+| `enable()` / `disable()`          | -                                                                               | `void`          | 直接调用底层的 `on()`/`off()`，用于切换编辑状态。                                                       |
+| `addEventListener(...)`           | 与 `EventTarget#addEventListener` 相同                                          | `void`          | 绑定 `signature_pad` 的底层事件。                                                                      |
+| `removeEventListener(...)`        | 与 `EventTarget#removeEventListener` 相同                                       | `void`          | 移除事件监听。                                                                                         |
+| `getInstance()`                   | -                                                                               | `SignaturePad?` | 获取底层 `SignaturePad` 实例，方便直接访问所有属性/方法。                                             |
+
+### 事件
+
+| 事件                | 载荷              | 说明                                             |
+| ------------------- | ----------------- | ------------------------------------------------ |
+| `ready`             | `SignaturePad`    | 组件初始化完成并调整完大小后触发。               |
+| `begin` / `end`     | `void`            | 兼容旧版本的 `onBegin` / `onEnd`。               |
+| `beginStroke`       | `SignatureEvent`  | 笔画开始前触发，可通过 `preventDefault` 取消。   |
+| `beforeUpdateStroke`| `SignatureEvent`  | 笔画更新前回调。                                 |
+| `afterUpdateStroke` | `SignatureEvent`  | 笔画更新后回调。                                 |
+| `endStroke`         | `SignatureEvent`  | 笔画结束时触发。                                 |
 
 ### 签名选项
 
 ```typescript
-interface SigOption {
-  penColor?: string; // 画笔颜色（默认："rgb(0, 0, 0)"）
-  backgroundColor?: string; // 画布背景颜色（默认："rgb(255, 255, 255)"）
-  minWidth?: number; // 笔画最小宽度（默认：0.5）
-  maxWidth?: number; // 笔画最大宽度（默认：2.5）
-  velocityFilterWeight?: number; // 平滑权重（默认：0.7）
-}
+import type { Options as SignaturePadOptions } from "signature_pad";
+
+type SigOption = SignaturePadOptions;
+
+// 你可以传入 signature_pad 支持的所有配置，例如：
+// dotSize?: number;
+// minWidth?: number;
+// maxWidth?: number;
+// minDistance?: number;
+// throttle?: number;
+// velocityFilterWeight?: number;
+// penColor?: string;
+// backgroundColor?: string;
+// compositeOperation?: GlobalCompositeOperation;
+// canvasContextOptions?: CanvasRenderingContext2DSettings;
 ```
 
 ### 水印选项
@@ -189,6 +221,22 @@ interface WaterMarkOption {
   y?: number; // 填充文本 Y 位置（默认：20）
   sx?: number; // 描边文本 X 位置（默认：40）
   sy?: number; // 描边文本 Y 位置（默认：40）
+}
+```
+
+### 裁剪结果与选项
+
+```typescript
+interface TrimResult {
+  canvas: HTMLCanvasElement;            // 离屏画布（已裁剪）
+  dataUrl: string;                     // 方便直接使用的裁剪后 data URL
+  bounds: { x: number; y: number; width: number; height: number }; // 裁剪区域（像素）
+}
+
+interface TrimOptions {
+  format?: string;         // 传给 canvas.toDataURL 的格式
+  encoderOptions?: number; // JPEG/WebP 质量
+  backgroundColor?: string;// 覆盖用于检测留白的背景色
 }
 ```
 
@@ -416,6 +464,29 @@ const signature = ref(null);
 }
 </style>
 ```
+
+### 移除签名周围的留白
+
+```vue
+<template>
+  <Vue3Signature ref="signature" :w="'600px'" :h="'250px'" @end="trim" />
+  <img v-if="trimmed" :src="trimmed" alt="裁剪后的签名" />
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const signature = ref(null);
+const trimmed = ref("");
+
+const trim = () => {
+  const result = signature.value.trim();
+  trimmed.value = result?.dataUrl ?? "";
+};
+</script>
+```
+
+该功能基于 [issue #49 中的裁剪方案](https://github.com/szimek/signature_pad/issues/49#issuecomment-260976909)：组件复制当前画布，计算笔迹的最小包围盒并裁剪，只返回裁剪后的结果，不会修改用户正在编辑的画布。
 
 ## 🔧 高级用法
 
@@ -675,4 +746,3 @@ Copyright (c) 2024 Shayne Wang
   <br>
   如果这个项目对你有帮助，请考虑给它一个 ⭐️
 </div>
-
