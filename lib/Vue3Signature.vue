@@ -3,8 +3,9 @@
     <canvas
       ref="canvasRef"
       class="vue3-signature__canvas"
+      :class="{ 'vue3-signature__canvas--disabled': disabled }"
       :data-uid="canvasUid"
-      :disabled="disabled"
+      :aria-disabled="disabled ? 'true' : undefined"
       :style="canvasStyle"
     ></canvas>
   </div>

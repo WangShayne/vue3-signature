@@ -3,8 +3,9 @@
     <canvas
         :id="state.uid"
         class="canvas"
+        :class="{ 'canvas--disabled': props.disabled }"
         :data-uid="state.uid"
-        :disabled="state.disabled"
+        :aria-disabled="props.disabled ? 'true' : undefined"
     ></canvas>
   </div>
 </template>
