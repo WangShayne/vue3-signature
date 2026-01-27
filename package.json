@@ -1,7 +1,7 @@
 {
   "name": "vue3-signature",
   "description": "Electronic signature for Vue3",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "author": "Shayne Wang <1614565666@qq.com>",
   "private": false,
   "license": "MIT",
@@ -37,13 +37,14 @@
   "dependencies": {
     "default-passive-events": "^2.0.0",
     "signature_pad": "^5.1.1",
-    "vue": "^3.2.37"
+    "vue": "^3.2.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/compiler-sfc": "^3.5.13",
     "typescript": "^5.7.2",
     "vite": "^5.4.11",
+    "vite-plugin-css-injected-by-js": "^3.5.2",
     "vue-tsc": "^2.1.10"
   }
 }

@@ -1,3 +1,4 @@
+(function(){"use strict";try{if(typeof document<"u"){var e=document.createElement("style");e.appendChild(document.createTextNode(".vue3-signature__canvas[data-v-c64bdf13]{width:100%;height:100%;display:block}.vue3-signature__canvas--disabled[data-v-c64bdf13]{cursor:not-allowed}")),document.head.appendChild(e)}}catch(d){console.error("vite-plugin-css-injected-by-js",d)}})();
 var vt = Object.defineProperty;
 var _t = (c, a, t) => a in c ? vt(c, a, { enumerable: !0, configurable: !0, writable: !0, value: t }) : c[a] = t;
 var m = (c, a, t) => _t(c, typeof a != "symbol" ? a + "" : a, t);

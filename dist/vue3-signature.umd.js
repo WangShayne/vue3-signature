@@ -1,3 +1,4 @@
+(function(){"use strict";try{if(typeof document<"u"){var e=document.createElement("style");e.appendChild(document.createTextNode(".vue3-signature__canvas[data-v-c64bdf13]{width:100%;height:100%;display:block}.vue3-signature__canvas--disabled[data-v-c64bdf13]{cursor:not-allowed}")),document.head.appendChild(e)}}catch(d){console.error("vite-plugin-css-injected-by-js",d)}})();
 (function(g,y){typeof exports=="object"&&typeof module<"u"?module.exports=y(require("vue")):typeof define=="function"&&define.amd?define(["vue"],y):(g=typeof globalThis<"u"?globalThis:g||self,g["vue3-signature"]=y(g.vue))})(this,function(g){"use strict";var bt=Object.defineProperty;var St=(g,y,A)=>y in g?bt(g,y,{enumerable:!0,configurable:!0,writable:!0,value:A}):g[y]=A;var p=(g,y,A)=>St(g,typeof y!="symbol"?y+"":y,A);/*!
  * Signature Pad v5.1.1 | https://github.com/szimek/signature_pad
  * (c) 2025 Szymon Nowak | Released under the MIT license
