@@ -1,7 +1,7 @@
 {
   "name": "vue3-signature",
   "description": "Electronic signature for Vue3",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "author": "Shayne Wang <1614565666@qq.com>",
   "private": false,
   "license": "MIT",

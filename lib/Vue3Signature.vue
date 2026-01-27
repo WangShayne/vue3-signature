@@ -581,4 +581,8 @@ export default {
   height: 100%;
   display: block;
 }
+
+.vue3-signature__canvas--disabled {
+  cursor: not-allowed;
+}
 </style>

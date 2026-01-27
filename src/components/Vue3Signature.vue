@@ -237,4 +237,8 @@ canvas {
   width: 100%;
   height: 100%;
 }
+
+.canvas--disabled {
+  cursor: not-allowed;
+}
 </style>
