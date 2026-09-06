@@ -109,7 +109,7 @@ const ensureColorParser = () => {
   const parserCanvas = document.createElement("canvas");
   parserCanvas.width = 1;
   parserCanvas.height = 1;
-  colorParserCtx = parserCanvas.getContext("2d");
+  colorParserCtx = parserCanvas.getContext("2d", { willReadFrequently: true });
   return colorParserCtx;
 };
 
@@ -139,19 +139,10 @@ const colorToRgba = (color?: string | null): [number, number, number, number] | 
 };
 
 const findTrimBounds = (
-  canvas: HTMLCanvasElement,
+  imageData: ImageData,
   backgroundColor?: string,
 ): TrimBounds | null => {
-  const ctx = canvas.getContext("2d");
-  if (!ctx) {
-    return null;
-  }
-  const { width, height } = canvas;
-  if (width === 0 || height === 0) {
-    return null;
-  }
-  const imageData = ctx.getImageData(0, 0, width, height);
-  const data = imageData.data;
+  const { width, height, data } = imageData;
   const bg = colorToRgba(backgroundColor);
 
   let top = height;
@@ -229,7 +220,8 @@ const captureSignatureState = (pad: SignaturePad): PreservedSignatureState => {
     console.warn("[vue3-signature] Failed to read signature data", error);
   }
 
-  if (hasSignature) {
+  // Vector strokes are restored directly; only raster-only content needs a PNG.
+  if (hasSignature && !strokes.length) {
     try {
       dataUrl = pad.toDataURL();
     } catch (error) {
@@ -265,8 +257,14 @@ const setupPadEvents = () => {
   teardownPadEvents();
 
   const map: Record<string, (event: SignatureEvent) => void> = {
-    beginStroke: (event) => emit("beginStroke", event),
-    endStroke: (event) => emit("endStroke", event),
+    beginStroke: (event) => {
+      emit("beginStroke", event);
+      emit("begin");
+    },
+    endStroke: (event) => {
+      emit("endStroke", event);
+      emit("end");
+    },
     beforeUpdateStroke: (event) => emit("beforeUpdateStroke", event),
     afterUpdateStroke: (event) => emit("afterUpdateStroke", event),
   };
@@ -280,8 +278,6 @@ const setupPadEvents = () => {
     padEventHandlers.push({ type, listener });
   });
 
-  (signaturePad.value as any).onBegin = () => emit("begin");
-  (signaturePad.value as any).onEnd = () => emit("end");
 };
 
 function teardownPadEvents() {
@@ -355,17 +351,24 @@ const getEffectiveBackgroundColor = (override?: string) =>
 const trim = (options?: TrimOptions): TrimResult | null => {
   const canvas = canvasRef.value;
   const pad = signaturePad.value;
-  if (!canvas || !pad || pad.isEmpty()) {
+  if (!canvas || !pad || pad.isEmpty() || !canvas.width || !canvas.height) {
     return null;
   }
 
-  const bounds = findTrimBounds(canvas, getEffectiveBackgroundColor(options?.backgroundColor));
+  // Context settings only apply on first creation. Read a dedicated copy so
+  // trimming does not force the drawing surface to use a software renderer.
+  const readbackCanvas = document.createElement("canvas");
+  readbackCanvas.width = canvas.width;
+  readbackCanvas.height = canvas.height;
+  const readbackCtx = readbackCanvas.getContext("2d", { willReadFrequently: true });
+  if (!readbackCtx) {
+    return null;
+  }
+  readbackCtx.drawImage(canvas, 0, 0);
+  const imageData = readbackCtx.getImageData(0, 0, canvas.width, canvas.height);
+
+  const bounds = findTrimBounds(imageData, getEffectiveBackgroundColor(options?.backgroundColor));
   if (!bounds) {
-    return null;
-  }
-
-  const ctx = canvas.getContext("2d");
-  if (!ctx) {
     return null;
   }
 
@@ -377,8 +380,7 @@ const trim = (options?: TrimOptions): TrimResult | null => {
     return null;
   }
 
-  const imageData = ctx.getImageData(bounds.x, bounds.y, bounds.width, bounds.height);
-  trimmedCtx.putImageData(imageData, 0, 0);
+  trimmedCtx.putImageData(imageData, -bounds.x, -bounds.y);
 
   let dataUrl: string;
   if (options?.format) {

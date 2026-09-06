@@ -1,76 +1,76 @@
-(function(){"use strict";try{if(typeof document<"u"){var e=document.createElement("style");e.appendChild(document.createTextNode(".vue3-signature__canvas[data-v-c64bdf13]{width:100%;height:100%;display:block}.vue3-signature__canvas--disabled[data-v-c64bdf13]{cursor:not-allowed}")),document.head.appendChild(e)}}catch(d){console.error("vite-plugin-css-injected-by-js",d)}})();
-var vt = Object.defineProperty;
-var _t = (c, a, t) => a in c ? vt(c, a, { enumerable: !0, configurable: !0, writable: !0, value: t }) : c[a] = t;
-var m = (c, a, t) => _t(c, typeof a != "symbol" ? a + "" : a, t);
-import { defineComponent as gt, ref as mt, shallowRef as pt, reactive as wt, watch as F, onMounted as yt, onBeforeUnmount as xt, createElementBlock as Et, openBlock as bt, withModifiers as St, normalizeStyle as kt, createElementVNode as Pt, normalizeClass as Ut, nextTick as Dt } from "vue";
+(function(){"use strict";try{if(typeof document<"u"){var e=document.createElement("style");e.appendChild(document.createTextNode(".vue3-signature__canvas[data-v-c691789c]{width:100%;height:100%;display:block}.vue3-signature__canvas--disabled[data-v-c691789c]{cursor:not-allowed}")),document.head.appendChild(e)}}catch(t){console.error("vite-plugin-css-injected-by-js",t)}})();
+var ut = Object.defineProperty;
+var ft = (l, a, t) => a in l ? ut(l, a, { enumerable: !0, configurable: !0, writable: !0, value: t }) : l[a] = t;
+var m = (l, a, t) => ft(l, typeof a != "symbol" ? a + "" : a, t);
+import { defineComponent as vt, ref as _t, shallowRef as gt, reactive as mt, watch as A, onMounted as pt, onBeforeUnmount as wt, openBlock as yt, createElementBlock as xt, withModifiers as Et, normalizeStyle as bt, createElementVNode as St, normalizeClass as kt, nextTick as Pt } from "vue";
 /*!
  * Signature Pad v5.1.1 | https://github.com/szimek/signature_pad
  * (c) 2025 Szymon Nowak | Released under the MIT license
  */
-var N = class {
-  constructor(c, a, t, e) {
+var $ = class {
+  constructor(l, a, t, e) {
     m(this, "x");
     m(this, "y");
     m(this, "pressure");
     m(this, "time");
-    if (isNaN(c) || isNaN(a))
-      throw new Error(`Point is invalid: (${c}, ${a})`);
-    this.x = +c, this.y = +a, this.pressure = t || 0, this.time = e || Date.now();
+    if (isNaN(l) || isNaN(a))
+      throw new Error(`Point is invalid: (${l}, ${a})`);
+    this.x = +l, this.y = +a, this.pressure = t || 0, this.time = e || Date.now();
   }
-  distanceTo(c) {
+  distanceTo(l) {
     return Math.sqrt(
-      Math.pow(this.x - c.x, 2) + Math.pow(this.y - c.y, 2)
+      Math.pow(this.x - l.x, 2) + Math.pow(this.y - l.y, 2)
     );
   }
-  equals(c) {
-    return this.x === c.x && this.y === c.y && this.pressure === c.pressure && this.time === c.time;
+  equals(l) {
+    return this.x === l.x && this.y === l.y && this.pressure === l.pressure && this.time === l.time;
   }
-  velocityFrom(c) {
-    return this.time !== c.time ? this.distanceTo(c) / (this.time - c.time) : 0;
+  velocityFrom(l) {
+    return this.time !== l.time ? this.distanceTo(l) / (this.time - l.time) : 0;
   }
-}, Mt = class J {
-  constructor(a, t, e, o, r, d) {
-    this.startPoint = a, this.control2 = t, this.control1 = e, this.endPoint = o, this.startWidth = r, this.endWidth = d;
+}, Ut = class X {
+  constructor(a, t, e, s, r, c) {
+    this.startPoint = a, this.control2 = t, this.control1 = e, this.endPoint = s, this.startWidth = r, this.endWidth = c;
   }
   static fromPoints(a, t) {
-    const e = this.calculateControlPoints(a[0], a[1], a[2]).c2, o = this.calculateControlPoints(a[1], a[2], a[3]).c1;
-    return new J(a[1], e, o, a[2], t.start, t.end);
+    const e = this.calculateControlPoints(a[0], a[1], a[2]).c2, s = this.calculateControlPoints(a[1], a[2], a[3]).c1;
+    return new X(a[1], e, s, a[2], t.start, t.end);
   }
   static calculateControlPoints(a, t, e) {
-    const o = a.x - t.x, r = a.y - t.y, d = t.x - e.x, s = t.y - e.y, u = { x: (a.x + t.x) / 2, y: (a.y + t.y) / 2 }, f = { x: (t.x + e.x) / 2, y: (t.y + e.y) / 2 }, _ = Math.sqrt(o * o + r * r), p = Math.sqrt(d * d + s * s), P = u.x - f.x, T = u.y - f.y, y = _ + p == 0 ? 0 : p / (_ + p), U = { x: f.x + P * y, y: f.y + T * y }, v = t.x - U.x, M = t.y - U.y;
+    const s = a.x - t.x, r = a.y - t.y, c = t.x - e.x, o = t.y - e.y, u = { x: (a.x + t.x) / 2, y: (a.y + t.y) / 2 }, f = { x: (t.x + e.x) / 2, y: (t.y + e.y) / 2 }, _ = Math.sqrt(s * s + r * r), p = Math.sqrt(c * c + o * o), U = u.x - f.x, T = u.y - f.y, E = _ + p == 0 ? 0 : p / (_ + p), C = { x: f.x + U * E, y: f.y + T * E }, v = t.x - C.x, D = t.y - C.y;
     return {
-      c1: new N(u.x + v, u.y + M),
-      c2: new N(f.x + v, f.y + M)
+      c1: new $(u.x + v, u.y + D),
+      c2: new $(f.x + v, f.y + D)
     };
   }
   // Returns approximated length. Code taken from https://www.lemoda.net/maths/bezier-length/index.html.
   length() {
-    let t = 0, e, o;
+    let t = 0, e, s;
     for (let r = 0; r <= 10; r += 1) {
-      const d = r / 10, s = this.point(
-        d,
+      const c = r / 10, o = this.point(
+        c,
         this.startPoint.x,
         this.control1.x,
         this.control2.x,
         this.endPoint.x
       ), u = this.point(
-        d,
+        c,
         this.startPoint.y,
         this.control1.y,
         this.control2.y,
         this.endPoint.y
       );
       if (r > 0) {
-        const f = s - e, _ = u - o;
+        const f = o - e, _ = u - s;
         t += Math.sqrt(f * f + _ * _);
       }
-      e = s, o = u;
+      e = o, s = u;
     }
     return t;
   }
   // Calculate parametric value of x or y given t and the four point coordinates of a cubic bezier curve.
-  point(a, t, e, o, r) {
-    return t * (1 - a) * (1 - a) * (1 - a) + 3 * e * (1 - a) * (1 - a) * a + 3 * o * (1 - a) * a * a + r * a * a * a;
+  point(a, t, e, s, r) {
+    return t * (1 - a) * (1 - a) * (1 - a) + 3 * e * (1 - a) * (1 - a) * a + 3 * s * (1 - a) * a * a + r * a * a * a;
   }
 }, Ct = class {
   /* tslint:enable: variable-name */
@@ -83,27 +83,27 @@ var N = class {
       this._et = document;
     }
   }
-  addEventListener(c, a, t) {
-    this._et.addEventListener(c, a, t);
+  addEventListener(l, a, t) {
+    this._et.addEventListener(l, a, t);
   }
-  dispatchEvent(c) {
-    return this._et.dispatchEvent(c);
+  dispatchEvent(l) {
+    return this._et.dispatchEvent(l);
   }
-  removeEventListener(c, a, t) {
-    this._et.removeEventListener(c, a, t);
+  removeEventListener(l, a, t) {
+    this._et.removeEventListener(l, a, t);
   }
 };
-function Tt(c, a = 250) {
-  let t = 0, e = null, o, r, d;
-  const s = () => {
-    t = Date.now(), e = null, o = c.apply(r, d), e || (r = null, d = []);
+function Mt(l, a = 250) {
+  let t = 0, e = null, s, r, c;
+  const o = () => {
+    t = Date.now(), e = null, s = l.apply(r, c), e || (r = null, c = []);
   };
   return function(...f) {
     const _ = Date.now(), p = a - (_ - t);
-    return r = this, d = f, p <= 0 || p > a ? (e && (clearTimeout(e), e = null), t = _, o = c.apply(r, d), e || (r = null, d = [])) : e || (e = window.setTimeout(s, p)), o;
+    return r = this, c = f, p <= 0 || p > a ? (e && (clearTimeout(e), e = null), t = _, s = l.apply(r, c), e || (r = null, c = [])) : e || (e = window.setTimeout(o, p)), s;
   };
 }
-var Lt = class G extends Ct {
+var Dt = class G extends Ct {
   /* tslint:enable: variable-name */
   constructor(t, e = {}) {
     super();
@@ -133,7 +133,7 @@ var Lt = class G extends Ct {
     m(this, "_lastWidth", 0);
     m(this, "_strokeMoveUpdate");
     m(this, "_strokePointerId");
-    this.canvas = t, this.velocityFilterWeight = e.velocityFilterWeight || 0.7, this.minWidth = e.minWidth || 0.5, this.maxWidth = e.maxWidth || 2.5, this.throttle = e.throttle ?? 16, this.minDistance = e.minDistance ?? 5, this.dotSize = e.dotSize || 0, this.penColor = e.penColor || "black", this.backgroundColor = e.backgroundColor || "rgba(0,0,0,0)", this.compositeOperation = e.compositeOperation || "source-over", this.canvasContextOptions = e.canvasContextOptions ?? {}, this._strokeMoveUpdate = this.throttle ? Tt(G.prototype._strokeUpdate, this.throttle) : G.prototype._strokeUpdate, this._handleMouseDown = this._handleMouseDown.bind(this), this._handleMouseMove = this._handleMouseMove.bind(this), this._handleMouseUp = this._handleMouseUp.bind(this), this._handleTouchStart = this._handleTouchStart.bind(this), this._handleTouchMove = this._handleTouchMove.bind(this), this._handleTouchEnd = this._handleTouchEnd.bind(this), this._handlePointerDown = this._handlePointerDown.bind(this), this._handlePointerMove = this._handlePointerMove.bind(this), this._handlePointerUp = this._handlePointerUp.bind(this), this._ctx = t.getContext(
+    this.canvas = t, this.velocityFilterWeight = e.velocityFilterWeight || 0.7, this.minWidth = e.minWidth || 0.5, this.maxWidth = e.maxWidth || 2.5, this.throttle = e.throttle ?? 16, this.minDistance = e.minDistance ?? 5, this.dotSize = e.dotSize || 0, this.penColor = e.penColor || "black", this.backgroundColor = e.backgroundColor || "rgba(0,0,0,0)", this.compositeOperation = e.compositeOperation || "source-over", this.canvasContextOptions = e.canvasContextOptions ?? {}, this._strokeMoveUpdate = this.throttle ? Mt(G.prototype._strokeUpdate, this.throttle) : G.prototype._strokeUpdate, this._handleMouseDown = this._handleMouseDown.bind(this), this._handleMouseMove = this._handleMouseMove.bind(this), this._handleMouseUp = this._handleMouseUp.bind(this), this._handleTouchStart = this._handleTouchStart.bind(this), this._handleTouchMove = this._handleTouchMove.bind(this), this._handleTouchEnd = this._handleTouchEnd.bind(this), this._handlePointerDown = this._handlePointerDown.bind(this), this._handlePointerMove = this._handlePointerMove.bind(this), this._handlePointerUp = this._handlePointerUp.bind(this), this._ctx = t.getContext(
       "2d",
       this.canvasContextOptions
     ), this.clear(), this.on();
@@ -143,17 +143,17 @@ var Lt = class G extends Ct {
     t.fillStyle = this.backgroundColor, t.clearRect(0, 0, e.width, e.height), t.fillRect(0, 0, e.width, e.height), this._data = [], this._reset(this._getPointGroupOptions()), this._isEmpty = !0, this._dataUrl = void 0, this._dataUrlOptions = void 0, this._strokePointerId = void 0;
   }
   redraw() {
-    const t = this._data, e = this._dataUrl, o = this._dataUrlOptions;
-    this.clear(), e && this.fromDataURL(e, o), this.fromData(t, { clear: !1 });
+    const t = this._data, e = this._dataUrl, s = this._dataUrlOptions;
+    this.clear(), e && this.fromDataURL(e, s), this.fromData(t, { clear: !1 });
   }
   fromDataURL(t, e = {}) {
-    return new Promise((o, r) => {
-      const d = new Image(), s = e.ratio || window.devicePixelRatio || 1, u = e.width || this.canvas.width / s, f = e.height || this.canvas.height / s, _ = e.xOffset || 0, p = e.yOffset || 0;
-      this._reset(this._getPointGroupOptions()), d.onload = () => {
-        this._ctx.drawImage(d, _, p, u, f), o();
-      }, d.onerror = (P) => {
-        r(P);
-      }, d.crossOrigin = "anonymous", d.src = t, this._isEmpty = !1, this._dataUrl = t, this._dataUrlOptions = { ...e };
+    return new Promise((s, r) => {
+      const c = new Image(), o = e.ratio || window.devicePixelRatio || 1, u = e.width || this.canvas.width / o, f = e.height || this.canvas.height / o, _ = e.xOffset || 0, p = e.yOffset || 0;
+      this._reset(this._getPointGroupOptions()), c.onload = () => {
+        this._ctx.drawImage(c, _, p, u, f), s();
+      }, c.onerror = (U) => {
+        r(U);
+      }, c.crossOrigin = "anonymous", c.src = t, this._isEmpty = !1, this._dataUrl = t, this._dataUrlOptions = { ...e };
     });
   }
   toDataURL(t = "image/png", e) {
@@ -290,32 +290,32 @@ var Lt = class G extends Ct {
       new CustomEvent("beginStroke", { detail: t, cancelable: !0 })
     ))
       return;
-    const { addEventListener: o } = this._getListenerFunctions();
+    const { addEventListener: s } = this._getListenerFunctions();
     switch (t.event.type) {
       case "mousedown":
-        o("mousemove", this._handleMouseMove, {
+        s("mousemove", this._handleMouseMove, {
           passive: !1
-        }), o("mouseup", this._handleMouseUp, { passive: !1 });
+        }), s("mouseup", this._handleMouseUp, { passive: !1 });
         break;
       case "touchstart":
-        o("touchmove", this._handleTouchMove, {
+        s("touchmove", this._handleTouchMove, {
           passive: !1
-        }), o("touchend", this._handleTouchEnd, { passive: !1 });
+        }), s("touchend", this._handleTouchEnd, { passive: !1 });
         break;
       case "pointerdown":
-        o("pointermove", this._handlePointerMove, {
+        s("pointermove", this._handlePointerMove, {
           passive: !1
-        }), o("pointerup", this._handlePointerUp, {
+        }), s("pointerup", this._handlePointerUp, {
           passive: !1
         });
         break;
     }
     this._drawingStroke = !0;
-    const r = this._getPointGroupOptions(), d = {
+    const r = this._getPointGroupOptions(), c = {
       ...r,
       points: []
     };
-    this._data.push(d), this._reset(r), this._strokeUpdate(t);
+    this._data.push(c), this._reset(r), this._strokeUpdate(t);
   }
   _strokeUpdate(t) {
     if (!this._drawingStroke)
@@ -327,10 +327,10 @@ var Lt = class G extends Ct {
     this.dispatchEvent(
       new CustomEvent("beforeUpdateStroke", { detail: t })
     );
-    const e = this._createPoint(t.x, t.y, t.pressure), o = this._data[this._data.length - 1], r = o.points, d = r.length > 0 && r[r.length - 1], s = d ? e.distanceTo(d) <= this.minDistance : !1, u = this._getPointGroupOptions(o);
-    if (!d || !(d && s)) {
+    const e = this._createPoint(t.x, t.y, t.pressure), s = this._data[this._data.length - 1], r = s.points, c = r.length > 0 && r[r.length - 1], o = c ? e.distanceTo(c) <= this.minDistance : !1, u = this._getPointGroupOptions(s);
+    if (!c || !(c && o)) {
       const f = this._addPoint(e, u);
-      d ? f && this._drawCurve(f, u) : this._drawDot(e, u), r.push({
+      c ? f && this._drawCurve(f, u) : this._drawDot(e, u), r.push({
         time: e.time,
         x: e.x,
         y: e.y,
@@ -361,116 +361,116 @@ var Lt = class G extends Ct {
   _reset(t) {
     this._lastPoints = [], this._lastVelocity = 0, this._lastWidth = (t.minWidth + t.maxWidth) / 2, this._ctx.fillStyle = t.penColor, this._ctx.globalCompositeOperation = t.compositeOperation;
   }
-  _createPoint(t, e, o) {
+  _createPoint(t, e, s) {
     const r = this.canvas.getBoundingClientRect();
-    return new N(
+    return new $(
       t - r.left,
       e - r.top,
-      o,
+      s,
       (/* @__PURE__ */ new Date()).getTime()
     );
   }
   // Add point to _lastPoints array and generate a new curve if there are enough points (i.e. 3)
   _addPoint(t, e) {
-    const { _lastPoints: o } = this;
-    if (o.push(t), o.length > 2) {
-      o.length === 3 && o.unshift(o[0]);
+    const { _lastPoints: s } = this;
+    if (s.push(t), s.length > 2) {
+      s.length === 3 && s.unshift(s[0]);
       const r = this._calculateCurveWidths(
-        o[1],
-        o[2],
+        s[1],
+        s[2],
         e
-      ), d = Mt.fromPoints(o, r);
-      return o.shift(), d;
+      ), c = Ut.fromPoints(s, r);
+      return s.shift(), c;
     }
     return null;
   }
-  _calculateCurveWidths(t, e, o) {
-    const r = o.velocityFilterWeight * e.velocityFrom(t) + (1 - o.velocityFilterWeight) * this._lastVelocity, d = this._strokeWidth(r, o), s = {
-      end: d,
+  _calculateCurveWidths(t, e, s) {
+    const r = s.velocityFilterWeight * e.velocityFrom(t) + (1 - s.velocityFilterWeight) * this._lastVelocity, c = this._strokeWidth(r, s), o = {
+      end: c,
       start: this._lastWidth
     };
-    return this._lastVelocity = r, this._lastWidth = d, s;
+    return this._lastVelocity = r, this._lastWidth = c, o;
   }
   _strokeWidth(t, e) {
     return Math.max(e.maxWidth / (t + 1), e.minWidth);
   }
-  _drawCurveSegment(t, e, o) {
+  _drawCurveSegment(t, e, s) {
     const r = this._ctx;
-    r.moveTo(t, e), r.arc(t, e, o, 0, 2 * Math.PI, !1), this._isEmpty = !1;
+    r.moveTo(t, e), r.arc(t, e, s, 0, 2 * Math.PI, !1), this._isEmpty = !1;
   }
   _drawCurve(t, e) {
-    const o = this._ctx, r = t.endWidth - t.startWidth, d = Math.ceil(t.length()) * 2;
-    o.beginPath(), o.fillStyle = e.penColor;
-    for (let s = 0; s < d; s += 1) {
-      const u = s / d, f = u * u, _ = f * u, p = 1 - u, P = p * p, T = P * p;
-      let y = T * t.startPoint.x;
-      y += 3 * P * u * t.control1.x, y += 3 * p * f * t.control2.x, y += _ * t.endPoint.x;
-      let U = T * t.startPoint.y;
-      U += 3 * P * u * t.control1.y, U += 3 * p * f * t.control2.y, U += _ * t.endPoint.y;
+    const s = this._ctx, r = t.endWidth - t.startWidth, c = Math.ceil(t.length()) * 2;
+    s.beginPath(), s.fillStyle = e.penColor;
+    for (let o = 0; o < c; o += 1) {
+      const u = o / c, f = u * u, _ = f * u, p = 1 - u, U = p * p, T = U * p;
+      let E = T * t.startPoint.x;
+      E += 3 * U * u * t.control1.x, E += 3 * p * f * t.control2.x, E += _ * t.endPoint.x;
+      let C = T * t.startPoint.y;
+      C += 3 * U * u * t.control1.y, C += 3 * p * f * t.control2.y, C += _ * t.endPoint.y;
       const v = Math.min(
         t.startWidth + _ * r,
         e.maxWidth
       );
-      this._drawCurveSegment(y, U, v);
+      this._drawCurveSegment(E, C, v);
     }
-    o.closePath(), o.fill();
+    s.closePath(), s.fill();
   }
   _drawDot(t, e) {
-    const o = this._ctx, r = e.dotSize > 0 ? e.dotSize : (e.minWidth + e.maxWidth) / 2;
-    o.beginPath(), this._drawCurveSegment(t.x, t.y, r), o.closePath(), o.fillStyle = e.penColor, o.fill();
+    const s = this._ctx, r = e.dotSize > 0 ? e.dotSize : (e.minWidth + e.maxWidth) / 2;
+    s.beginPath(), this._drawCurveSegment(t.x, t.y, r), s.closePath(), s.fillStyle = e.penColor, s.fill();
   }
-  _fromData(t, e, o) {
+  _fromData(t, e, s) {
     for (const r of t) {
-      const { points: d } = r, s = this._getPointGroupOptions(r);
-      if (d.length > 1)
-        for (let u = 0; u < d.length; u += 1) {
-          const f = d[u], _ = new N(
+      const { points: c } = r, o = this._getPointGroupOptions(r);
+      if (c.length > 1)
+        for (let u = 0; u < c.length; u += 1) {
+          const f = c[u], _ = new $(
             f.x,
             f.y,
             f.pressure,
             f.time
           );
-          u === 0 && this._reset(s);
-          const p = this._addPoint(_, s);
-          p && e(p, s);
+          u === 0 && this._reset(o);
+          const p = this._addPoint(_, o);
+          p && e(p, o);
         }
       else
-        this._reset(s), o(d[0], s);
+        this._reset(o), s(c[0], o);
     }
   }
   toSVG({ includeBackgroundColor: t = !1, includeDataUrl: e = !1 } = {}) {
-    var p, P, T, y, U;
-    const o = this._data, r = Math.max(window.devicePixelRatio || 1, 1), d = 0, s = 0, u = this.canvas.width / r, f = this.canvas.height / r, _ = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    if (_.setAttribute("xmlns", "http://www.w3.org/2000/svg"), _.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink"), _.setAttribute("viewBox", `${d} ${s} ${u} ${f}`), _.setAttribute("width", u.toString()), _.setAttribute("height", f.toString()), t && this.backgroundColor) {
+    var p, U, T, E, C;
+    const s = this._data, r = Math.max(window.devicePixelRatio || 1, 1), c = 0, o = 0, u = this.canvas.width / r, f = this.canvas.height / r, _ = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    if (_.setAttribute("xmlns", "http://www.w3.org/2000/svg"), _.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink"), _.setAttribute("viewBox", `${c} ${o} ${u} ${f}`), _.setAttribute("width", u.toString()), _.setAttribute("height", f.toString()), t && this.backgroundColor) {
       const v = document.createElement("rect");
       v.setAttribute("width", "100%"), v.setAttribute("height", "100%"), v.setAttribute("fill", this.backgroundColor), _.appendChild(v);
     }
     if (e && this._dataUrl) {
-      const v = ((p = this._dataUrlOptions) == null ? void 0 : p.ratio) || window.devicePixelRatio || 1, M = ((P = this._dataUrlOptions) == null ? void 0 : P.width) || this.canvas.width / v, E = ((T = this._dataUrlOptions) == null ? void 0 : T.height) || this.canvas.height / v, L = ((y = this._dataUrlOptions) == null ? void 0 : y.xOffset) || 0, W = ((U = this._dataUrlOptions) == null ? void 0 : U.yOffset) || 0, w = document.createElement("image");
-      w.setAttribute("x", L.toString()), w.setAttribute("y", W.toString()), w.setAttribute("width", M.toString()), w.setAttribute("height", E.toString()), w.setAttribute("preserveAspectRatio", "none"), w.setAttribute("href", this._dataUrl), _.appendChild(w);
+      const v = ((p = this._dataUrlOptions) == null ? void 0 : p.ratio) || window.devicePixelRatio || 1, D = ((U = this._dataUrlOptions) == null ? void 0 : U.width) || this.canvas.width / v, S = ((T = this._dataUrlOptions) == null ? void 0 : T.height) || this.canvas.height / v, L = ((E = this._dataUrlOptions) == null ? void 0 : E.xOffset) || 0, W = ((C = this._dataUrlOptions) == null ? void 0 : C.yOffset) || 0, y = document.createElement("image");
+      y.setAttribute("x", L.toString()), y.setAttribute("y", W.toString()), y.setAttribute("width", D.toString()), y.setAttribute("height", S.toString()), y.setAttribute("preserveAspectRatio", "none"), y.setAttribute("href", this._dataUrl), _.appendChild(y);
     }
     return this._fromData(
-      o,
-      (v, { penColor: M }) => {
-        const E = document.createElement("path");
+      s,
+      (v, { penColor: D }) => {
+        const S = document.createElement("path");
         if (!isNaN(v.control1.x) && !isNaN(v.control1.y) && !isNaN(v.control2.x) && !isNaN(v.control2.y)) {
           const L = `M ${v.startPoint.x.toFixed(3)},${v.startPoint.y.toFixed(
             3
           )} C ${v.control1.x.toFixed(3)},${v.control1.y.toFixed(3)} ${v.control2.x.toFixed(3)},${v.control2.y.toFixed(3)} ${v.endPoint.x.toFixed(3)},${v.endPoint.y.toFixed(3)}`;
-          E.setAttribute("d", L), E.setAttribute("stroke-width", (v.endWidth * 2.25).toFixed(3)), E.setAttribute("stroke", M), E.setAttribute("fill", "none"), E.setAttribute("stroke-linecap", "round"), _.appendChild(E);
+          S.setAttribute("d", L), S.setAttribute("stroke-width", (v.endWidth * 2.25).toFixed(3)), S.setAttribute("stroke", D), S.setAttribute("fill", "none"), S.setAttribute("stroke-linecap", "round"), _.appendChild(S);
         }
       },
-      (v, { penColor: M, dotSize: E, minWidth: L, maxWidth: W }) => {
-        const w = document.createElement("circle"), I = E > 0 ? E : (L + W) / 2;
-        w.setAttribute("r", I.toString()), w.setAttribute("cx", v.x.toString()), w.setAttribute("cy", v.y.toString()), w.setAttribute("fill", M), _.appendChild(w);
+      (v, { penColor: D, dotSize: S, minWidth: L, maxWidth: W }) => {
+        const y = document.createElement("circle"), F = S > 0 ? S : (L + W) / 2;
+        y.setAttribute("r", F.toString()), y.setAttribute("cx", v.x.toString()), y.setAttribute("cy", v.y.toString()), y.setAttribute("fill", D), _.appendChild(y);
       }
     ), _.outerHTML;
   }
 };
-const Ot = ["aria-disabled"], Wt = {
+const Tt = ["aria-disabled"], Lt = {
   name: "Vue3Signature"
-}, Rt = /* @__PURE__ */ gt({
-  ...Wt,
+}, Ot = /* @__PURE__ */ vt({
+  ...Lt,
   props: {
     sigOption: {
       type: Object,
@@ -502,11 +502,11 @@ const Ot = ["aria-disabled"], Wt = {
     }
   },
   emits: ["ready", "begin", "end", "beginStroke", "endStroke", "beforeUpdateStroke", "afterUpdateStroke"],
-  setup(c, { expose: a, emit: t }) {
-    const e = c, o = {
+  setup(l, { expose: a, emit: t }) {
+    const e = l, s = {
       width: "100%",
       height: "100%"
-    }, r = mt(null), d = `canvas-${Math.random().toString(36).slice(2, 9)}`, s = pt(null), u = wt({
+    }, r = _t(null), c = `canvas-${Math.random().toString(36).slice(2, 9)}`, o = gt(null), u = mt({
       backgroundColor: "rgb(255,255,255)",
       penColor: "rgb(0, 0, 0)",
       minWidth: 0.5,
@@ -520,8 +520,8 @@ const Ot = ["aria-disabled"], Wt = {
       if (f)
         return f;
       const i = document.createElement("canvas");
-      return i.width = 1, i.height = 1, f = i.getContext("2d"), f;
-    }, P = (i) => {
+      return i.width = 1, i.height = 1, f = i.getContext("2d", { willReadFrequently: !0 }), f;
+    }, U = (i) => {
       if (!i)
         return null;
       if (_.has(i))
@@ -536,275 +536,275 @@ const Ot = ["aria-disabled"], Wt = {
         return console.warn(`[vue3-signature] Unable to parse color "${i}"`, g), null;
       }
       n.fillRect(0, 0, 1, 1);
-      const h = n.getImageData(0, 0, 1, 1).data, l = [h[0], h[1], h[2], h[3]];
-      return _.set(i, l), l;
+      const h = n.getImageData(0, 0, 1, 1).data, d = [h[0], h[1], h[2], h[3]];
+      return _.set(i, d), d;
     }, T = (i, n) => {
-      const h = i.getContext("2d");
-      if (!h)
-        return null;
-      const { width: l, height: g } = i;
-      if (l === 0 || g === 0)
-        return null;
-      const x = h.getImageData(0, 0, l, g).data, D = P(n);
-      let S = g, C = l, R = -1, A = -1;
-      const $ = (k) => D ? x[k] === D[0] && x[k + 1] === D[1] && x[k + 2] === D[2] && x[k + 3] === D[3] : x[k + 3] === 0;
-      for (let k = 0; k < g; k += 1)
-        for (let O = 0; O < l; O += 1) {
-          const ft = (k * l + O) * 4;
-          $(ft) || (O < C && (C = O), O > R && (R = O), k < S && (S = k), k > A && (A = k));
+      const { width: h, height: d, data: g } = i, b = U(n);
+      let w = d, x = h, M = -1, k = -1;
+      const N = (P) => b ? g[P] === b[0] && g[P + 1] === b[1] && g[P + 2] === b[2] && g[P + 3] === b[3] : g[P + 3] === 0;
+      for (let P = 0; P < d; P += 1)
+        for (let O = 0; O < h; O += 1) {
+          const dt = (P * h + O) * 4;
+          N(dt) || (O < x && (x = O), O > M && (M = O), P < w && (w = P), P > k && (k = P));
         }
-      if (R === -1 || A === -1)
+      if (M === -1 || k === -1)
         return null;
-      const X = R - C + 1, Y = A - S + 1;
-      return X <= 0 || Y <= 0 ? null : {
-        x: C,
-        y: S,
-        width: X,
-        height: Y
+      const z = M - x + 1, R = k - w + 1;
+      return z <= 0 || R <= 0 ? null : {
+        x,
+        y: w,
+        width: z,
+        height: R
       };
-    }, y = [], U = (i) => {
+    }, E = [], C = (i) => {
       i && Object.entries(i).forEach(([n, h]) => {
         h !== void 0 && (u[n] = h);
       });
     }, v = () => {
       var i;
-      W(), (i = s.value) == null || i.off(), s.value = null;
-    }, M = (i) => {
+      W(), (i = o.value) == null || i.off(), o.value = null;
+    }, D = (i) => {
       let n, h = [];
-      const l = !i.isEmpty();
+      const d = !i.isEmpty();
       try {
         h = i.toData();
       } catch (g) {
         console.warn("[vue3-signature] Failed to read signature data", g);
       }
-      if (l)
+      if (d && !h.length)
         try {
           n = i.toDataURL();
         } catch (g) {
           console.warn("[vue3-signature] Failed to capture dataURL", g);
         }
       return {
-        hasSignature: l,
+        hasSignature: d,
         strokes: h,
         dataUrl: n
       };
-    }, E = (i) => {
+    }, S = (i) => {
       var n;
-      if (!(!i || !s.value || !i.hasSignature)) {
+      if (!(!i || !o.value || !i.hasSignature)) {
         if ((n = i.strokes) != null && n.length) {
-          s.value.fromData(i.strokes);
+          o.value.fromData(i.strokes);
           return;
         }
-        i.dataUrl && s.value.fromDataURL(i.dataUrl).catch(() => {
+        i.dataUrl && o.value.fromDataURL(i.dataUrl).catch(() => {
         });
       }
     }, L = () => {
-      if (!s.value) return;
+      if (!o.value) return;
       W(), Object.entries({
-        beginStroke: (n) => t("beginStroke", n),
-        endStroke: (n) => t("endStroke", n),
+        beginStroke: (n) => {
+          t("beginStroke", n), t("begin");
+        },
+        endStroke: (n) => {
+          t("endStroke", n), t("end");
+        },
         beforeUpdateStroke: (n) => t("beforeUpdateStroke", n),
         afterUpdateStroke: (n) => t("afterUpdateStroke", n)
       }).forEach(([n, h]) => {
         var g;
-        const l = (b) => {
-          const x = b.detail;
-          h(x);
+        const d = (b) => {
+          const w = b.detail;
+          h(w);
         };
-        (g = s.value) == null || g.addEventListener(n, l), y.push({ type: n, listener: l });
-      }), s.value.onBegin = () => t("begin"), s.value.onEnd = () => t("end");
+        (g = o.value) == null || g.addEventListener(n, d), E.push({ type: n, listener: d });
+      });
     };
     function W() {
-      !s.value || !y.length || (y.forEach(({ type: i, listener: n }) => {
+      !o.value || !E.length || (E.forEach(({ type: i, listener: n }) => {
         var h;
-        (h = s.value) == null || h.removeEventListener(i, n);
-      }), y.length = 0);
+        (h = o.value) == null || h.removeEventListener(i, n);
+      }), E.length = 0);
     }
-    const w = (i) => {
-      s.value && (i ? s.value.off() : s.value.on());
-    }, I = (i, n) => {
+    const y = (i) => {
+      o.value && (i ? o.value.off() : o.value.on());
+    }, F = (i, n) => {
       if (/px$/i.test(i)) {
         const h = Number(i.replace(/px/gi, ""));
         return Number.isFinite(h) ? h : n;
       }
       return n;
-    }, B = () => {
-      const i = r.value, n = s.value;
+    }, I = () => {
+      const i = r.value, n = o.value;
       if (!i || !n) return;
       let h;
-      !e.clearOnResize && !n.isEmpty() && (h = M(n));
-      const l = Math.max(window.devicePixelRatio || 1, 1), g = i.parentElement, b = (g == null ? void 0 : g.clientWidth) ?? i.offsetWidth, x = (g == null ? void 0 : g.clientHeight) ?? i.offsetHeight, D = I(e.w, b), S = I(e.h, x);
-      i.width = D * l, i.height = S * l;
-      const C = i.getContext("2d");
-      C == null || C.scale(l, l), n.clear(), h ? E(h) : Object.keys(e.waterMark).length && z(e.waterMark);
+      !e.clearOnResize && !n.isEmpty() && (h = D(n));
+      const d = Math.max(window.devicePixelRatio || 1, 1), g = i.parentElement, b = (g == null ? void 0 : g.clientWidth) ?? i.offsetWidth, w = (g == null ? void 0 : g.clientHeight) ?? i.offsetHeight, x = F(e.w, b), M = F(e.h, w);
+      i.width = x * d, i.height = M * d;
+      const k = i.getContext("2d");
+      k == null || k.scale(d, d), n.clear(), h ? S(h) : Object.keys(e.waterMark).length && B(e.waterMark);
     }, j = (i) => {
-      !i || !s.value || s.value.fromDataURL(i).catch(() => {
+      !i || !o.value || o.value.fromDataURL(i).catch(() => {
       });
-    }, K = (i) => {
+    }, Y = (i) => {
       var n;
-      return i ?? ((n = s.value) == null ? void 0 : n.backgroundColor) ?? u.backgroundColor ?? "rgba(0,0,0,0)";
+      return i ?? ((n = o.value) == null ? void 0 : n.backgroundColor) ?? u.backgroundColor ?? "rgba(0,0,0,0)";
     }, V = (i) => {
-      const n = r.value, h = s.value;
-      if (!n || !h || h.isEmpty())
+      const n = r.value, h = o.value;
+      if (!n || !h || h.isEmpty() || !n.width || !n.height)
         return null;
-      const l = T(n, K(i == null ? void 0 : i.backgroundColor));
-      if (!l)
-        return null;
-      const g = n.getContext("2d");
+      const d = document.createElement("canvas");
+      d.width = n.width, d.height = n.height;
+      const g = d.getContext("2d", { willReadFrequently: !0 });
       if (!g)
         return null;
-      const b = document.createElement("canvas");
-      b.width = l.width, b.height = l.height;
-      const x = b.getContext("2d");
-      if (!x)
+      g.drawImage(n, 0, 0);
+      const b = g.getImageData(0, 0, n.width, n.height), w = T(b, Y(i == null ? void 0 : i.backgroundColor));
+      if (!w)
         return null;
-      const D = g.getImageData(l.x, l.y, l.width, l.height);
-      x.putImageData(D, 0, 0);
-      let S;
-      return i != null && i.format ? S = b.toDataURL(i.format, i.encoderOptions) : S = b.toDataURL(), {
-        canvas: b,
-        dataUrl: S,
-        bounds: l
+      const x = document.createElement("canvas");
+      x.width = w.width, x.height = w.height;
+      const M = x.getContext("2d");
+      if (!M)
+        return null;
+      M.putImageData(b, -w.x, -w.y);
+      let k;
+      return i != null && i.format ? k = x.toDataURL(i.format, i.encoderOptions) : k = x.toDataURL(), {
+        canvas: x,
+        dataUrl: k,
+        bounds: w
       };
-    }, Q = (i, n) => {
+    }, J = (i, n) => {
       var h;
       return ((h = V({ format: i, encoderOptions: n })) == null ? void 0 : h.dataUrl) ?? "";
-    }, z = (i) => {
+    }, B = (i) => {
       if (Object.prototype.toString.call(i) !== "[object Object]")
         throw new Error("Expected Object, got " + typeof i + ".");
-      const n = r.value, h = s.value;
+      const n = r.value, h = o.value;
       if (!n || !h) return;
-      const l = n.getContext("2d");
-      if (!l) return;
+      const d = n.getContext("2d");
+      if (!d) return;
       const {
         text: g = "",
         x: b = 20,
-        y: x = 20,
-        sx: D = 40,
-        sy: S = 40,
-        font: C = "20px sans-serif",
-        fillStyle: R = "#333",
-        strokeStyle: A = "#333",
-        style: $ = "fill"
+        y: w = 20,
+        sx: x = 40,
+        sy: M = 40,
+        font: k = "20px sans-serif",
+        fillStyle: N = "#333",
+        strokeStyle: z = "#333",
+        style: R = "fill"
       } = i;
-      l.save(), l.font = C, l.fillStyle = R, l.strokeStyle = A, $ === "all" ? (l.fillText(g, b, x), l.strokeText(g, D, S)) : $ === "stroke" ? l.strokeText(g, D, S) : l.fillText(g, b, x), l.restore(), h._isEmpty = !1;
-    }, H = async (i = !1) => {
+      d.save(), d.font = k, d.fillStyle = N, d.strokeStyle = z, R === "all" ? (d.fillText(g, b, w), d.strokeText(g, x, M)) : R === "stroke" ? d.strokeText(g, x, M) : d.fillText(g, b, w), d.restore(), h._isEmpty = !1;
+    }, q = async (i = !1) => {
       const n = r.value;
       if (!n) return;
-      const h = i && s.value ? M(s.value) : void 0;
-      v(), s.value = new Lt(n, { ...u }), L(), w(e.disabled), await Dt(), B(), h ? E(h) : e.defaultUrl ? j(e.defaultUrl) : Object.keys(e.waterMark).length && z(e.waterMark), t("ready", s.value);
-    }, Z = () => {
+      const h = i && o.value ? D(o.value) : void 0;
+      v(), o.value = new Dt(n, { ...u }), L(), y(e.disabled), await Pt(), I(), h ? S(h) : e.defaultUrl ? j(e.defaultUrl) : Object.keys(e.waterMark).length && B(e.waterMark), t("ready", o.value);
+    }, K = () => {
       var i;
-      return (i = s.value) == null ? void 0 : i.clear();
-    }, tt = () => {
+      return (i = o.value) == null ? void 0 : i.clear();
+    }, Q = () => {
       var i;
-      return (i = s.value) == null ? void 0 : i.redraw();
-    }, q = (i, n) => s.value ? s.value.toDataURL(i, n) : "", et = (i) => {
+      return (i = o.value) == null ? void 0 : i.redraw();
+    }, H = (i, n) => o.value ? o.value.toDataURL(i, n) : "", Z = (i) => {
       var n;
-      return ((n = s.value) == null ? void 0 : n.toSVG(i)) ?? "";
-    }, it = q, nt = (i, n) => {
+      return ((n = o.value) == null ? void 0 : n.toSVG(i)) ?? "";
+    }, tt = H, et = (i, n) => {
       var h;
-      return (h = s.value) == null ? void 0 : h.fromDataURL(i, n);
-    }, st = (i, n) => {
+      return (h = o.value) == null ? void 0 : h.fromDataURL(i, n);
+    }, it = (i, n) => {
       var h;
-      return (h = s.value) == null ? void 0 : h.fromData(i, n);
+      return (h = o.value) == null ? void 0 : h.fromData(i, n);
+    }, nt = () => {
+      var i;
+      return ((i = o.value) == null ? void 0 : i.toData()) ?? [];
+    }, st = () => {
+      var i;
+      return ((i = o.value) == null ? void 0 : i.isEmpty()) ?? !0;
     }, ot = () => {
       var i;
-      return ((i = s.value) == null ? void 0 : i.toData()) ?? [];
+      return (i = o.value) == null ? void 0 : i.on();
     }, at = () => {
       var i;
-      return ((i = s.value) == null ? void 0 : i.isEmpty()) ?? !0;
-    }, rt = () => {
-      var i;
-      return (i = s.value) == null ? void 0 : i.on();
-    }, ht = () => {
-      var i;
-      return (i = s.value) == null ? void 0 : i.off();
-    }, lt = (i, n, h) => {
-      var l;
-      return (l = s.value) == null ? void 0 : l.addEventListener(i, n, h);
-    }, ct = (i, n, h) => {
-      var l;
-      return (l = s.value) == null ? void 0 : l.removeEventListener(i, n, h);
-    }, dt = (i = 1) => {
-      const n = s.value;
+      return (i = o.value) == null ? void 0 : i.off();
+    }, rt = (i, n, h) => {
+      var d;
+      return (d = o.value) == null ? void 0 : d.addEventListener(i, n, h);
+    }, ht = (i, n, h) => {
+      var d;
+      return (d = o.value) == null ? void 0 : d.removeEventListener(i, n, h);
+    }, lt = (i = 1) => {
+      const n = o.value;
       if (!n || i <= 0) return;
       const h = n.toData();
       h.length && (h.splice(Math.max(h.length - i, 0), i), n.fromData(h));
-    }, ut = () => s.value;
-    return F(
+    }, ct = () => o.value;
+    return A(
       () => e.sigOption,
       (i) => {
-        U(i), H(!0);
+        C(i), q(!0);
       },
       { deep: !0 }
-    ), F(
+    ), A(
       () => e.disabled,
-      (i) => w(i),
+      (i) => y(i),
       { immediate: !0 }
-    ), F(
+    ), A(
       () => e.defaultUrl,
       (i) => j(i)
-    ), F(
+    ), A(
       () => [e.w, e.h],
-      () => B()
-    ), F(
+      () => I()
+    ), A(
       () => e.waterMark,
       (i) => {
-        i && Object.keys(i).length && z(i);
+        i && Object.keys(i).length && B(i);
       },
       { deep: !0 }
-    ), yt(() => {
-      H(), window.addEventListener("resize", B);
-    }), xt(() => {
-      window.removeEventListener("resize", B), v();
+    ), pt(() => {
+      q(), window.addEventListener("resize", I);
+    }), wt(() => {
+      window.removeEventListener("resize", I), v();
     }), a({
-      clear: Z,
-      save: it,
-      toDataURL: q,
-      toTrimmedDataURL: Q,
-      toSVG: et,
-      fromDataURL: nt,
-      fromData: st,
-      toData: ot,
-      redraw: tt,
-      isEmpty: at,
-      undo: dt,
-      addWaterMark: z,
+      clear: K,
+      save: tt,
+      toDataURL: H,
+      toTrimmedDataURL: J,
+      toSVG: Z,
+      fromDataURL: et,
+      fromData: it,
+      toData: nt,
+      redraw: Q,
+      isEmpty: st,
+      undo: lt,
+      addWaterMark: B,
       trim: V,
-      enable: rt,
-      disable: ht,
-      addEventListener: lt,
-      removeEventListener: ct,
-      getInstance: ut
-    }), (i, n) => (bt(), Et("div", {
+      enable: ot,
+      disable: at,
+      addEventListener: rt,
+      removeEventListener: ht,
+      getInstance: ct
+    }), (i, n) => (yt(), xt("div", {
       class: "vue3-signature",
-      style: kt({ width: c.w, height: c.h }),
-      onTouchmove: n[0] || (n[0] = St(() => {
+      style: bt({ width: l.w, height: l.h }),
+      onTouchmove: n[0] || (n[0] = Et(() => {
       }, ["prevent"]))
     }, [
-      Pt("canvas", {
+      St("canvas", {
         ref_key: "canvasRef",
         ref: r,
-        class: Ut(["vue3-signature__canvas", { "vue3-signature__canvas--disabled": c.disabled }]),
-        "data-uid": d,
-        "aria-disabled": c.disabled ? "true" : void 0,
-        style: o
-      }, null, 10, Ot)
+        class: kt(["vue3-signature__canvas", { "vue3-signature__canvas--disabled": l.disabled }]),
+        "data-uid": c,
+        "aria-disabled": l.disabled ? "true" : void 0,
+        style: s
+      }, null, 10, Tt)
     ], 36));
   }
-}), At = (c, a) => {
-  const t = c.__vccOpts || c;
-  for (const [e, o] of a)
-    t[e] = o;
+}), Wt = (l, a) => {
+  const t = l.__vccOpts || l;
+  for (const [e, s] of a)
+    t[e] = s;
   return t;
-}, Ft = /* @__PURE__ */ At(Rt, [["__scopeId", "data-v-c64bdf13"]]);
-function It(c) {
-  return c.install = (a) => {
-    a.component(c.name, c);
-  }, c;
+}, Rt = /* @__PURE__ */ Wt(Ot, [["__scopeId", "data-v-c691789c"]]);
+function At(l) {
+  return l.install = (a) => {
+    a.component(l.name, l);
+  }, l;
 }
-const $t = It(Ft);
+const Bt = At(Rt);
 export {
-  $t as default
+  Bt as default
 };

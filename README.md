@@ -184,8 +184,8 @@ All native `signature_pad` events are forwarded so you can react to drawing life
 | Event                | Payload             | Description                                                                                 |
 | -------------------- | ------------------- | ------------------------------------------------------------------------------------------- |
 | `ready`              | `SignaturePad`      | Emitted after the canvas has been initialised/resized and the instance is ready to use.     |
-| `begin` / `end`      | `void`              | Compatibility shims for `signaturePad.onBegin` / `onEnd`.                                   |
-| `beginStroke`        | `SignatureEvent`    | Fired before a stroke starts (cancelable via `event.preventDefault()` in `signature_pad`).  |
+| `begin` / `end`      | `void`              | Compatibility aliases emitted alongside `beginStroke` / `endStroke`.                       |
+| `beginStroke`        | `SignatureEvent`    | Stroke details before drawing starts. To cancel, use `addEventListener('beginStroke', event => event.preventDefault())` on the component instance. |
 | `beforeUpdateStroke` | `SignatureEvent`    | Fired before a stroke segment is rendered.                                                  |
 | `afterUpdateStroke`  | `SignatureEvent`    | Fired after a stroke segment is rendered.                                                   |
 | `endStroke`          | `SignatureEvent`    | Fired after a stroke ends.                                                                  |
@@ -750,4 +750,18 @@ const captureTrimmed = () => {
 </script>
 ```
 
-The implementation is based on the [popular workaround described here](https://github.com/szimek/signature_pad/issues/49#issuecomment-260976909): the component copies the current canvas, crops out the empty pixels, and returns the cropped data URL without mutating the visible canvas. Use it on `@end` to keep a continuously trimmed value if needed.
+The implementation is based on the [popular workaround described here](https://github.com/szimek/signature_pad/issues/49#issuecomment-260976909): the component copies the current canvas, crops out the empty pixels, and returns the cropped data URL without mutating the visible canvas. Use it on `@end` to keep a continuously trimmed value if needed. Pixel reads use an off-screen context created with `willReadFrequently: true`; your drawing context settings remain unchanged.
+
+## Development
+
+Use Node.js 22 and npm. `package-lock.json` is the maintained lockfile.
+
+```sh
+npm ci
+npm test
+npm run build
+npm run test:types
+npm run build:demo
+```
+
+Tests mount the real Vue component and `signature_pad` with DOM events and a native canvas renderer. `npm pack` and `npm publish` run the tests and rebuild JavaScript and declarations before packaging. Vue is a peer dependency, so applications use their own Vue installation.

@@ -32,11 +32,20 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "22"
           cache: "npm"
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Test signature component
+        run: npm test
+
+      - name: Build library and declarations
+        run: npm run build
+
+      - name: Check package types
+        run: npm run test:types
 
       - name: Build demo
         run: npm run build:demo
@@ -60,4 +69,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-

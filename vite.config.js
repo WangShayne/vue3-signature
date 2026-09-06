@@ -9,12 +9,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command, mode }) => {
+export default defineConfig(({ mode }) => {
   // 库构建模式（用于发布到 npm）
   if (mode === "lib") {
     return {
       plugins: [vue(), cssInjectedByJsPlugin()],
       build: {
+        copyPublicDir: false,
         lib: {
           entry: resolve(__dirname, "./lib/index.ts"),
           name: "vue3-signature",

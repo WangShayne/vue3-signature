@@ -182,8 +182,8 @@ const undo = () => {
 | 事件                | 载荷              | 说明                                             |
 | ------------------- | ----------------- | ------------------------------------------------ |
 | `ready`             | `SignaturePad`    | 组件初始化完成并调整完大小后触发。               |
-| `begin` / `end`     | `void`            | 兼容旧版本的 `onBegin` / `onEnd`。               |
-| `beginStroke`       | `SignatureEvent`  | 笔画开始前触发，可通过 `preventDefault` 取消。   |
+| `begin` / `end`     | `void`            | 兼容旧版本，与 `beginStroke` / `endStroke` 同时触发。 |
+| `beginStroke`       | `SignatureEvent`  | 笔画开始前的详细信息。要取消绘制，请在组件实例上使用 `addEventListener('beginStroke', event => event.preventDefault())`。 |
 | `beforeUpdateStroke`| `SignatureEvent`  | 笔画更新前回调。                                 |
 | `afterUpdateStroke` | `SignatureEvent`  | 笔画更新后回调。                                 |
 | `endStroke`         | `SignatureEvent`  | 笔画结束时触发。                                 |
@@ -725,6 +725,22 @@ Vue3 Signature 适用于所有现代浏览器：
 - 当前版本：5.1.1
 
 通过使用 Vue3 Signature，你可以获得 signature_pad 的全部功能，同时享受 Vue 3 组合式 API 的简洁性。
+
+## 开发与验证
+
+使用 Node.js 22 和 npm，以 `package-lock.json` 作为维护的锁文件。
+
+```sh
+npm ci
+npm test
+npm run build
+npm run test:types
+npm run build:demo
+```
+
+测试挂载真实 Vue 组件和 `signature_pad`，通过 DOM 事件与原生 Canvas 渲染验证行为。`npm pack` 和 `npm publish` 会先执行测试，再生成 JavaScript 和类型声明。Vue 作为 peer dependency 使用宿主应用已有的版本。
+
+裁剪使用启用了 `willReadFrequently: true` 的离屏画布读取像素，不修改可见画布及其渲染配置。
 
 ## 📄 许可证
 

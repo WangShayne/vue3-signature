@@ -1,7 +1,7 @@
 {
   "name": "vue3-signature",
   "description": "Electronic signature for Vue3",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "author": "Shayne Wang <1614565666@qq.com>",
   "private": false,
   "license": "MIT",
@@ -18,15 +18,23 @@
   "types": "./types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/vue3-signature.mjs",
-      "require": "./dist/vue3-signature.umd.js",
-      "types": "./types/index.d.ts"
+      "import": {
+        "types": "./types/index.d.mts",
+        "default": "./dist/vue3-signature.mjs"
+      },
+      "require": {
+        "types": "./types/index.d.cts",
+        "default": "./dist/vue3-signature.umd.js"
+      }
     }
   },
   "scripts": {
+    "test": "vitest run",
+    "test:types": "tsc --noEmit --strict --skipLibCheck --target ES2020 --module NodeNext --moduleResolution NodeNext tests/types/consumer.mts tests/types/consumer.cts && tsc --noEmit --strict --skipLibCheck --target ES2020 --module ESNext --moduleResolution Bundler tests/types/consumer.mts",
+    "prepack": "npm test && npm run build && npm run test:types",
     "dev": "vite",
     "build": "vite build --mode lib && npm run build:tsc",
-    "build:tsc": "vue-tsc --emitDeclarationOnly",
+    "build:tsc": "vue-tsc --emitDeclarationOnly && node scripts/copy-type-entries.mjs",
     "build:demo": "vite build",
     "preview": "vite preview",
     "serve": "vite preview"
@@ -35,16 +43,19 @@
     "vue": "^3.2.0"
   },
   "dependencies": {
-    "default-passive-events": "^2.0.0",
-    "signature_pad": "^5.1.1",
-    "vue": "^3.2.0"
+    "signature_pad": "^5.1.1"
   },
   "devDependencies": {
+    "@napi-rs/canvas": "^0.1.100",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/compiler-sfc": "^3.5.13",
+    "@vue/test-utils": "~2.4.6",
+    "jsdom": "^26.1.0",
     "typescript": "^5.7.2",
-    "vite": "^5.4.11",
+    "vite": "^6.4.3",
     "vite-plugin-css-injected-by-js": "^3.5.2",
+    "vitest": "^3.2.7",
+    "vue": "^3.2.0",
     "vue-tsc": "^2.1.10"
   }
 }
