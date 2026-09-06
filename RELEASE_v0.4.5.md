@@ -13,4 +13,10 @@ Validation covers real Vue and `signature_pad` instances, mouse and pointer inpu
 
 Issue #32's original disabled-cursor regression has a regression check. The later report of an application that cannot draw remains open because it lacks a reproducible example; this release does not claim to resolve that unverified case.
 
-Automated validation: `npm test`, `npm run build`, `npm run test:types`, `npm run build:demo`, `npm audit`, and package-consumer checks. Interactive browser validation is unavailable in this environment: local navigation returns `ERR_BLOCKED_BY_CLIENT`.
+Validation completed:
+
+- 12 component regression tests passed, along with library/declaration builds and the demo build.
+- The actual tarball passed ESM/CommonJS imports, Vue plugin registration, and NodeNext/bundler type checks with Vue 3.2.0 and Vue 3.5.42. Minimum-version type checks use `skipLibCheck` for Vue 3.2.0's upstream declaration incompatibility with TypeScript 5.9; Vue 3.5.42 also passes full declaration checking.
+- `npm audit` reports zero vulnerabilities.
+- GitHub Actions completed all test, build, type-check and Pages deployment steps: [run 34018261481](https://github.com/WangShayne/vue3-signature/actions/runs/34018261481).
+- Chrome validation of the deployed demo confirmed drawing, five consecutive trims without Canvas warnings, and correct disabled cursor state. Canvas screenshots remain identical during disabled input and change again after enabling. The live demo loads the expected `index-ByXQOEq0.js` asset. Local navigation was blocked, so browser checks used the deployed Pages URL.
